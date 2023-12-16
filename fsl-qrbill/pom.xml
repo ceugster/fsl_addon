@@ -8,6 +8,7 @@
   </parent>
 
   <artifactId>fsl-qrbill</artifactId>
+  <packaging>jar</packaging>
 
   <name>QRBill Generator</name>
   <description>QRBill Generator generates Swiss QRBills</description>

@@ -273,9 +273,9 @@
 	</dependencies>
 
   <modules>
-  	<module>../fsl-camt</module>
-  	<module>../fsl-qrbill</module>
-  	<module>../fsl-xls</module>
-  	<module>../fsl-xml</module>
+  	<module>fsl-camt</module>
+  	<module>fsl-qrbill</module>
+  	<module>fsl-xls</module>
+  	<module>fsl-xml</module>
   </modules>
 </project>
