@@ -118,7 +118,7 @@ public class QRBillTest
 		assertEquals(ArrayNode.class, errorsNode.getClass());
 		assertEquals(1, errorsNode.size());
 		JsonNode errorNode = errorsNode.iterator().next();
-		assertEquals("cannot cast 'request': illegal json format", errorNode.asText());
+		assertEquals("missing argument 'request'", errorNode.asText());
 	}
 
 	@Test

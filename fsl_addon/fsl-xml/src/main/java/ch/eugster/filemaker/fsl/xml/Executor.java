@@ -11,15 +11,15 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public abstract class Executor
 {
-	protected static final String STATUS = "status";
+	public static final String STATUS = "status";
 	
-	protected static final String ERRORS = "errors";
+	public static final String ERRORS = "errors";
 	
-	protected static final String OK = "OK";
+	public static final String OK = "OK";
 
-	protected static final String ERROR = "Fehler";
+	public static final String ERROR = "Fehler";
 
-	protected static final String RESULT = "result";
+	public static final String RESULT = "result";
 
 	protected static ObjectMapper mapper = new ObjectMapper();
 	
@@ -40,15 +40,15 @@ public abstract class Executor
 			} 
 			catch (JsonMappingException e) 
 			{
-				result = addErrorMessage("cannot not map 'request': illegal json format");
+				result = addErrorMessage("cannot map 'request': illegal json format");
 			} 
 			catch (JsonProcessingException e) 
 			{
-				result = addErrorMessage("cannot not process 'request': illegal json format");
+				result = addErrorMessage("cannot process 'request': illegal json format");
 			}
 			catch (ClassCastException e)
 			{
-				result = addErrorMessage("cannot not cast 'request': illegal json format");
+				result = addErrorMessage("cannot cast 'request': illegal json format");
 			}
 		}
 		else

@@ -1,16 +1,18 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>ch.eugster.filemaker.fsl</groupId>
-    <artifactId>fsl_addon</artifactId>
-    <version>1.1.0</version>
-  </parent>
+	<parent>
+		<groupId>ch.eugster.filemaker.fsl</groupId>
+		<artifactId>fsl_addon</artifactId>
+		<version>1.1.1</version>
+	</parent>
 
-  <artifactId>fsl-qrbill</artifactId>
-  <packaging>jar</packaging>
+	<artifactId>fsl-qrbill</artifactId>
+	<packaging>jar</packaging>
 
-  <name>QRBill Generator</name>
-  <description>QRBill Generator generates Swiss QRBills</description>
+	<name>QRBill Generator</name>
+	<description>QRBill Generator generates Swiss QRBills</description>
 
 </project>
