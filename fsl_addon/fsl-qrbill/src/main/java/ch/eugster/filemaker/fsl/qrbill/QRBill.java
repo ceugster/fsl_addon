@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import net.codecrete.qrbill.generator.Address;
 import net.codecrete.qrbill.generator.Bill;
@@ -28,19 +27,18 @@ public class QRBill extends Executor
 
 	public static String generate(String request)
 	{
-		ObjectNode requestNode = getRequestNode(request);
-		if (Objects.nonNull(requestNode))
+		if (createRequestNode(request))
 		{
 			try 
 			{
 				Bill bill = new Bill();
-				bill.setAccount(checkString(getRequestNode(request), Key.IBAN.key()));
-				bill.setReference(checkString(getRequestNode(request), Key.REFERENCE.key()));
-				bill.setAmountFromDouble(checkDouble(getRequestNode(request), Key.AMOUNT.key()));
-				bill.setCurrency(checkString(getRequestNode(request), Key.CURRENCY.key()));
-				bill.setUnstructuredMessage(checkString(getRequestNode(request), Key.MESSAGE.key()));
+				bill.setAccount(checkString(getRequestNode(), Key.IBAN.key()));
+				bill.setReference(checkString(getRequestNode(), Key.REFERENCE.key()));
+				bill.setAmountFromDouble(checkDouble(getRequestNode(), Key.AMOUNT.key()));
+				bill.setCurrency(checkString(getRequestNode(), Key.CURRENCY.key()));
+				bill.setUnstructuredMessage(checkString(getRequestNode(), Key.MESSAGE.key()));
 	
-				JsonNode creditor = getRequestNode(request).get(Key.CREDITOR.key());
+				JsonNode creditor = getRequestNode().get(Key.CREDITOR.key());
 				if (JsonNode.class.isInstance(creditor))
 				{
 					Address address = new Address();
@@ -51,7 +49,7 @@ public class QRBill extends Executor
 					bill.setCreditor(address);
 				}
 	
-				JsonNode debtor = getRequestNode(request).get(Key.DEBTOR.key());
+				JsonNode debtor = getRequestNode().get(Key.DEBTOR.key());
 				if (JsonNode.class.isInstance(debtor))
 				{
 					Address address = new Address();
@@ -62,7 +60,7 @@ public class QRBill extends Executor
 					bill.setDebtor(address);
 				}
 	
-				JsonNode form = getRequestNode(request).get(Key.FORMAT.key());
+				JsonNode form = getRequestNode().get(Key.FORMAT.key());
 				if (JsonNode.class.isInstance(form))
 				{
 					BillFormat format = new BillFormat();
