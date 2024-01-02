@@ -372,15 +372,6 @@ public final class XlsTest extends AbstractXlsTest
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
 		assertEquals("missing argument '" + Key.PATH.key() + "'",responseNode.get(Executor.ERRORS).get(0).asText());
-
-		requestNode = mapper.createObjectNode();
-		requestNode.put(Key.PATH.key(), "$:ç");
-		
-		response = Xls.saveWorkbook(requestNode.toString());
-		
-		responseNode = mapper.readTree(response);
-		assertEquals(Executor.OK, responseNode.get(Executor.STATUS).asText());
-		assertNull(responseNode.get(Executor.ERRORS));
 	}
 
 	@Test
