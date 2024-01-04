@@ -15,8 +15,6 @@ For now there are four addons available:
 
 ## Installation
 
-You can use the .fmp12 files as is or generate an addon from it.
-
 1. At first download the ScriptMaster plugin (see above) and put it into the Extension folder of FileMaker.
 2. Simply download the .fmp12 file you wish to use to a convenient directory. 
 3. Open the .fmp12 file within FileMaker.
