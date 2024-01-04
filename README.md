@@ -1416,9 +1416,9 @@ set variable [ $response ; XlsActivateSheet ( $request ) ]
 | name | necessity | value(s) | description
 |---|---|---|---
 | `amount` | mandatory | positive number or 0 | JSONNumber
-| `currency` | mandatory | [ "CHF" || "EUR" ] | JSONString
+| `currency` | mandatory | "CHF" or "EUR" | JSONString
 | `iban` | mandatory | valid iban | JSONString
-| `reference` | mandatory | valid reference number | JSONString, if 26 ciphers given, the 27th cipher is computed
+| `reference` | mandatory | valid reference number with 27 ciphers | JSONString, if 26 ciphers given, the 27th cipher is computed
 | `message`| optional | arbitrary | JSONString
 | `creditor.name` | mandatory | arbitrary | JSONString
 | `creditor.address_line_1` | mandatory | arbitrary | JSONString
@@ -1428,9 +1428,9 @@ set variable [ $response ; XlsActivateSheet ( $request ) ]
 | `debtor.address_line_1` | mandatory | arbitrary | JSONString
 | `debtor.address_line_2` | mandatory | arbitrary | JSONString
 | `debtor.country` | mandatory | "CH" | JSONString
-| `format.graphics_format` | mandatory | [ "PDF" | "PNG" | "SVG" ] | JSONString
-| `format.output_size` | mandatory | [ "QR_BILL_EXTRA_SPACE" | "A4_PORTRAIT_SHEET" | "QR_BILL_ONLY" | "QR_CODE_ONLY" | "QR_BILL_EXTRA_SPACE" | "QR_CODE_WITH_QUIET_ZONE" ] | JSONString
-| `format.language` | mandatory | [ "DE" | "FR" | "IT" | "RM" | "EN" ] | JSONString
+| `format.graphics_format` | mandatory | "PDF" or "PNG" or "SVG" | JSONString
+| `format.output_size` | mandatory | "QR_BILL_EXTRA_SPACE" or "A4_PORTRAIT_SHEET" or "QR_BILL_ONLY" or "QR_CODE_ONLY" or "QR_BILL_EXTRA_SPACE" or "QR_CODE_WITH_QUIET_ZONE" | JSONString
+| `format.language` | mandatory | "DE" or "FR" or "IT" or "RM" or "EN" | JSONString
 
 ##### Response parameters
 
