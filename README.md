@@ -4,7 +4,7 @@
 
 **fsl_addon** was previously thought as plugin for FileMaker based on ScriptMaster by 360works. Because the function of creating custom plugins has not been successfull (and has been withdrawn in the meantime from the ScriptMaster plugin), I have choosen an alternative way to publish my "plugins".
 
-The Add Ons depend of the ScriptMaster plugin by 360works, downloadable from their website [https://www.360works.com/scriptmaster/](https://https://www.360works.com/scriptmaster/)(www.360works.com/scriptmaster/) for free. Put the extracted plugin into the Extension folder of FileMaker. It then should be listet in the plugins tab of the settings dialog.
+The Add Ons depend of the ScriptMaster plugin by 360works, downloadable from their website [https://www.360works.com/scriptmaster/](www.360works.com/scriptmaster/) for free. Put the extracted plugin into the Extension folder of FileMaker. It then should be listet in the plugins tab of the settings dialog.
 
 For now there are four addons available:
 
