@@ -1416,7 +1416,7 @@ set variable [ $response ; XlsActivateSheet ( $request ) ]
 | name | necessity | value(s) | description
 |---|---|---|---
 | `amount` | mandatory | positive number or 0 | JSONNumber
-| `currency` | mandatory | [ "CHF" | "EUR" ] | JSONString
+| `currency` | mandatory | [ "CHF" || "EUR" ] | JSONString
 | `iban` | mandatory | valid iban | JSONString
 | `reference` | mandatory | valid reference number | JSONString, if 26 ciphers given, the 27th cipher is computed
 | `message`| optional | arbitrary | JSONString
