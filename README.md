@@ -33,22 +33,22 @@ After the installation you
 ```
 set variable [ $request ; value: 
 JSONSetElement ( $request ; 
-    [ "amount" ; 287.3 ; JSONNumber ] ;
-    [ "currency" ; "CHF" ; JSONString ] ;
-    [ "iban" ; "CH4431999123000889012" ; JSONString ] ;
-    [ "reference" ; "000000000000000000000000000" ; JSONString] ;
-    [ "message" ; "Rechnungsnr. 10978 / Auftragsnr. 3987" ; JSONString ] ;
-    [ "creditor.name" ; "Schreinerei Habegger & Söhne" ; JSONString ] ;
-    [ "creditor.address_line_1" ; "Uetlibergstrasse 138" ; JSONString ] ;
-    [ "creditor.address_line_2" ; "8045 Zürich" ; JSONString ] ;
-    [ "creditor.country" ; "CH" ; JSONString ] ;
-    [ "debtor.name" ; "Simon Glarner" ; JSONString ] ;
-    [ "debtor.address_line_1" ; "Bächliwis 55" ; JSONString ] ;
-    [ "debtor.address_line_2" ; "8184 Bachenbülach" ; JSONString ] ;
-    [ "debtor.country" ; "CH" ; JSONString ] ;
-    [ "format.graphics_format" ; "PDF" ; JSONString ] ;
-    [ "format.output_size" ; "QR_BILL_EXTRA_SPACE" ; JSONString ] ;
-    [ "format.language" ; "DE" ; JSONString ]
+| "amount" ; 287.3 ; JSONNumber ] ;
+| "currency" ; "CHF" ; JSONString ] ;
+| "iban" ; "CH4431999123000889012" ; JSONString ] ;
+| "reference" ; "000000000000000000000000000" ; JSONString] ;
+| "message" ; "Rechnungsnr. 10978 / Auftragsnr. 3987" ; JSONString ] ;
+| "creditor.name" ; "Schreinerei Habegger & Söhne" ; JSONString ] ;
+| "creditor.address_line_1" ; "Uetlibergstrasse 138" ; JSONString ] ;
+| "creditor.address_line_2" ; "8045 Zürich" ; JSONString ] ;
+| "creditor.country" ; "CH" ; JSONString ] ;
+| "debtor.name" ; "Simon Glarner" ; JSONString ] ;
+| "debtor.address_line_1" ; "Bächliwis 55" ; JSONString ] ;
+| "debtor.address_line_2" ; "8184 Bachenbülach" ; JSONString ] ;
+| "debtor.country" ; "CH" ; JSONString ] ;
+| "format.graphics_format" ; "PDF" ; JSONString ] ;
+| "format.output_size" ; "QR_BILL_EXTRA_SPACE" ; JSONString ] ;
+| "format.language" ; "DE" ; JSONString ]
 )
 ```
 
@@ -87,7 +87,7 @@ If [ $status = "Fehler" ]
 End If   
 ```
 
-## Xls 
+## xls_addon 
 
 ### Commands
 
@@ -1333,4 +1333,108 @@ get whether the text should be wrapped
 ```
 JSONSetElement ( $request ; "wrap_text" ; 1 ; JSONNumber )
 ```
+
+## qrbill_addon 
+
+### Commands
+
+#### generate
+
+Generates a Swiss QRBill
+
+##### Example
+
+```
+set variable [ $request ; value: 
+JSONSetElement ( $request ; 
+    [ "amount" ; 287.3 ; JSONNumber ] ;
+    [ "currency" ; "CHF" ; JSONString ] ;
+    [ "iban" ; "CH4431999123000889012" ; JSONString ] ;
+    [ "reference" ; "000000000000000000000000000" ; JSONString] ;
+    [ "message" ; "Rechnungsnr. 10978 / Auftragsnr. 3987" ; JSONString ] ;
+    [ "creditor.name" ; "Schreinerei Habegger & Söhne" ; JSONString ] ;
+    [ "creditor.address_line_1" ; "Uetlibergstrasse 138" ; JSONString ] ;
+    [ "creditor.address_line_2" ; "8045 Zürich" ; JSONString ] ;
+    [ "creditor.country" ; "CH" ; JSONString ] ;
+    [ "debtor.name" ; "Simon Glarner" ; JSONString ] ;
+    [ "debtor.address_line_1" ; "Bächliwis 55" ; JSONString ] ;
+    [ "debtor.address_line_2" ; "8184 Bachenbülach" ; JSONString ] ;
+    [ "debtor.country" ; "CH" ; JSONString ] ;
+    [ "format.graphics_format" ; "PDF" ; JSONString ] ;
+    [ "format.output_size" ; "QR_BILL_EXTRA_SPACE" ; JSONString ] ;
+    [ "format.language" ; "DE" ; JSONString ]
+)
+```
+
+2. Run the command
+
+```
+set variable [ $response ; GenerateQRBill ( $request ) ] 
+```
+
+3. Check if the command has executed successfully
+
+```
+Variable setzen [ $status ; Wert: JSONGetElement ( $response ; "status" ) ] 
+```
+
+4. If the value of **$status** is "OK" then the command ended successfully, else the value is "Fehler"
+
+4.1 Extract the bitstream from $response, decode it and save it, if **$status** is "OK"
+
+```
+set variable [ $qrbill ; Base64Decode ( JSONGetElement ( $response ; "result" ) ; "QRBill.pdf" ) ]
+```
+
+4.2 Identify the errors, if **$status** is "Fehler"
+
+```
+If [ $status = "Fehler" ]
+    Set Variable [ $errors ; Value: JSONGetElement ( $response ; "errors" ) ]
+    Set Variable [ $count ; Value: ElementsCount ( $errors ) ]
+    Set Variable [ $index ; Value: 1 ]
+    Loop
+        Set Variable [ $error ; ElementsMiddle ( $errors ; $index ; 1 ) ]
+        Set Variable [ $index ; $index + 1 ) ]
+		Exit Loop If [ $index > $count ]         
+    End Loop
+End If   
+```
+
+or, with optional parameter "workbook"
+
+```
+JSONSetElement ( $request ; 
+    [ "sheet" ; "mySheet" ; JSONString ] ;
+    [ "workbook" ; "myWorkbook" ; JSONString ] 
+)
+set variable [ $response ; XlsActivateSheet ( $request ) ] 
+```
+
+##### Request parameters 
+
+| name | necessity | value(s) | description
+|---|---|---|---
+| `amount` | mandatory | positive number or 0 | JSONNumber
+| `currency` | mandatory | [ "CHF" | "EUR" ] | JSONString
+| `iban` | mandatory | valid iban | JSONString
+| `reference` | mandatory | valid reference number | JSONString, if 26 ciphers given, the 27th cipher is computed
+| `message`| optional | arbitrary | JSONString
+| `creditor.name` | mandatory | arbitrary | JSONString
+| `creditor.address_line_1` | mandatory | arbitrary | JSONString
+| `creditor.address_line_2` | mandatory | arbitrary | JSONString
+| `creditor.country` | mandatory | "CH" | JSONString
+| `debtor.name` | mandatory | arbitrary | JSONString
+| `debtor.address_line_1` | mandatory | arbitrary | JSONString
+| `debtor.address_line_2` | mandatory | arbitrary | JSONString
+| `debtor.country` | mandatory | "CH" | JSONString
+| `format.graphics_format` | mandatory | [ "PDF" | "PNG" | "SVG" ] | JSONString
+| `format.output_size` | mandatory | [ "QR_BILL_EXTRA_SPACE" | "A4_PORTRAIT_SHEET" | "QR_BILL_ONLY" | "QR_CODE_ONLY" | "QR_BILL_EXTRA_SPACE" | "QR_CODE_WITH_QUIET_ZONE" ] | JSONString
+| `format.language` | mandatory | [ "DE" | "FR" | "IT" | "RM" | "EN" ] | JSONString
+
+##### Response parameters
+
+| name | description
+|---|---
+| `result` | sheet index in the workbook
 
