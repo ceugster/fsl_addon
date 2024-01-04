@@ -1401,16 +1401,6 @@ If [ $status = "Fehler" ]
 End If   
 ```
 
-or, with optional parameter "workbook"
-
-```
-JSONSetElement ( $request ; 
-    [ "sheet" ; "mySheet" ; JSONString ] ;
-    [ "workbook" ; "myWorkbook" ; JSONString ] 
-)
-set variable [ $response ; XlsActivateSheet ( $request ) ] 
-```
-
 ##### Request parameters 
 
 | name | necessity | value(s) | description
@@ -1436,4 +1426,4 @@ set variable [ $response ; XlsActivateSheet ( $request ) ]
 
 | name | description
 |---|---
-| `result` | sheet index in the workbook
+| `result` | Base64 encoded pdf stream 
