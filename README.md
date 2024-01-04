@@ -1437,4 +1437,3 @@ set variable [ $response ; XlsActivateSheet ( $request ) ]
 | name | description
 |---|---
 | `result` | sheet index in the workbook
-
