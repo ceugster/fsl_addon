@@ -1,5 +1,5 @@
 # fsl_addon
-
+## Now supports version 2.3 of swiss payment standards
 ## General
 
 **fsl_addon** was previously thought as plugin for FileMaker based on ScriptMaster by 360works. Because the function of creating custom plugins has not been successfull (and has been withdrawn in the meantime from the ScriptMaster plugin), I have choosen an alternative way to publish my "plugins".
@@ -39,13 +39,17 @@ JSONSetElement ( $request ;
 | "reference" ; "000000000000000000000000000" ; JSONString] ;
 | "message" ; "Rechnungsnr. 10978 / Auftragsnr. 3987" ; JSONString ] ;
 | "creditor.name" ; "Schreinerei Habegger & Söhne" ; JSONString ] ;
-| "creditor.address_line_1" ; "Uetlibergstrasse 138" ; JSONString ] ;
-| "creditor.address_line_2" ; "8045 Zürich" ; JSONString ] ;
-| "creditor.country" ; "CH" ; JSONString ] ;
+| "creditor.street" ; "Uetlibergstrasse" ; JSONString ] ;
+| "creditor.houseNo" ; "138" ; JSONString ] ;
+| "creditor.postalCode" ; "8045" ; JSONString ] ;
+| "creditor.town" ; "Zürich" ; JSONString ] ;
+| "creditor.countryCode" ; "CH" ; JSONString ] ;
 | "debtor.name" ; "Simon Glarner" ; JSONString ] ;
-| "debtor.address_line_1" ; "Bächliwis 55" ; JSONString ] ;
-| "debtor.address_line_2" ; "8184 Bachenbülach" ; JSONString ] ;
-| "debtor.country" ; "CH" ; JSONString ] ;
+| "debtor.street" ; "Bächliwis" ; JSONString ] ;
+| "debtor.houseNo" ; "55" ; JSONString ] ;
+| "debtor.postalCode" ; "8184" ; JSONString ] ;
+| "creditor.town" ; "Bachenbülach" ; JSONString ] ;
+| "debtor.countryCode" ; "CH" ; JSONString ] ;
 | "format.graphics_format" ; "PDF" ; JSONString ] ;
 | "format.output_size" ; "QR_BILL_EXTRA_SPACE" ; JSONString ] ;
 | "format.language" ; "DE" ; JSONString ]
