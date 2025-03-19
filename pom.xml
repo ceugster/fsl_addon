@@ -3,7 +3,7 @@
 
   <groupId>ch.eugster.filemaker.fsl</groupId>
   <artifactId>fsl_addon</artifactId>
-  <version>1.1.2</version>
+  <version>1.1.3</version>
   <packaging>pom</packaging>
 
 	<properties>
@@ -32,12 +32,12 @@
 
 		<log4j.version>2.18.0</log4j.version>
 
-		<pdfbox.version>2.0.26</pdfbox.version>
+		<pdfbox.version>3.0.2</pdfbox.version>
 		<pw-swift-core>SRU2022-10.0.0.</pw-swift-core>
 		<pw-iso20022>SRU2022-10.0.1</pw-iso20022>
 		<poi.version>5.2.3</poi.version>
 
-		<qrbill.version>3.0.7</qrbill.version>
+		<qrbill.version>3.3.1</qrbill.version>
 		<qrcodegen.version>1.8.0</qrcodegen.version>
 
 		<slf4j.version>1.7.32</slf4j.version>

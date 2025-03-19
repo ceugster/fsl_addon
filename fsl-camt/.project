@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
   <name>fsl-camt</name>
-  <comment>CAMT Converter converts CAMT XLM files to CAMT JSON and vice versa. NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
+  <comment>CAMT Converter converts CAMT XLM files to CAMT JSON and vice
+		versa. NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
   <projects/>
   <buildSpec>
     <buildCommand>

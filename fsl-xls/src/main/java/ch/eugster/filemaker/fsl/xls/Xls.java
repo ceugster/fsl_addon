@@ -1635,10 +1635,10 @@ public class Xls extends Executor
 			if (cellNode.isTextual())
 			{
 				cellAddress = new CellAddress(cellNode.asText());
-				if (Objects.isNull(cellAddress))
-				{
-					addErrorMessage("illegal argument '" + cellNode.asText() + "'");
-				}
+//				if (Objects.isNull(cellAddress))
+//				{
+//					addErrorMessage("illegal argument '" + cellNode.asText() + "'");
+//				}
 			}
 			else if (cellNode.isObject())
 			{
@@ -1682,10 +1682,10 @@ public class Xls extends Executor
 		if (cellNode.isTextual())
 		{
 			cellAddress = new CellAddress(cellNode.asText());
-			if (Objects.isNull(cellAddress))
-			{
-				addErrorMessage("illegal argument '" + cellNode.asText() + "'");
-			}
+//			if (Objects.isNull(cellAddress))
+//			{
+//				addErrorMessage("illegal argument '" + cellNode.asText() + "'");
+//			}
 		}
 		else if (cellNode.isObject())
 		{
@@ -1780,22 +1780,22 @@ public class Xls extends Executor
 									if (rightNode.isInt())
 									{
 										bottomRightAddress = new CellAddress(bottomNode.asInt(), rightNode.asInt());
-										if (Objects.isNull(bottomRightAddress))
-										{
-											bottomRightAddress = getCellAddress(rangeNode.findPath(Key.BOTTOM_RIGHT.key()));
-											if (Objects.nonNull(bottomRightAddress))
-											{
-												cellRangeAddress = new CellRangeAddress(topLeftAddress.getRow(), bottomRightAddress.getRow(), topLeftAddress.getColumn(), bottomRightAddress.getColumn());
-											}
-											else
-											{
-												addErrorMessage("illegal argument '" + Key.BOTTOM_RIGHT.key() + "'");
-											}
-										}
-										else
-										{
+//										if (Objects.isNull(bottomRightAddress))
+//										{
+//											bottomRightAddress = getCellAddress(rangeNode.findPath(Key.BOTTOM_RIGHT.key()));
+//											if (Objects.nonNull(bottomRightAddress))
+//											{
+//												cellRangeAddress = new CellRangeAddress(topLeftAddress.getRow(), bottomRightAddress.getRow(), topLeftAddress.getColumn(), bottomRightAddress.getColumn());
+//											}
+//											else
+//											{
+//												addErrorMessage("illegal argument '" + Key.BOTTOM_RIGHT.key() + "'");
+//											}
+//										}
+//										else
+//										{
 											cellRangeAddress = new CellRangeAddress(topLeftAddress.getRow(), bottomRightAddress.getRow(), topLeftAddress.getColumn(), bottomRightAddress.getColumn());
-										}
+//										}
 									}
 									else
 									{

@@ -1,10 +1,8 @@
 package ch.eugster.filemaker.fsl.qrbill.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
@@ -25,7 +23,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.node.TextNode;
 
 import ch.eugster.filemaker.fsl.qrbill.Executor;
 import ch.eugster.filemaker.fsl.qrbill.QRBill;
@@ -68,42 +65,37 @@ public class QRBillTest
 	@Test
 	public void testInvalidCommand() throws JsonMappingException, JsonProcessingException
 	{
-		ObjectNode requestNodeNode = this.mapper.createObjectNode();
+		ObjectNode requestNode = this.mapper.createObjectNode();
 
-		String response = QRBill.generate(requestNodeNode.toString());
+		String response = QRBill.generate(requestNode.toString());
 
 		JsonNode responseNode = this.mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		JsonNode errorsNode = responseNode.get(Executor.ERRORS);
 		assertEquals(ArrayNode.class, errorsNode.getClass());
-		assertEquals(7, errorsNode.size());
-		Iterator<JsonNode> iterator = errorsNode.iterator();
-		while (iterator.hasNext())
+		assertEquals(8, errorsNode.size());
+		ArrayNode errors = ArrayNode.class.cast(responseNode.get(Executor.ERRORS));
+		Iterator<JsonNode> node = errors.iterator();
+		while (node.hasNext())
 		{
-			JsonNode errorNode = iterator.next();
-			if (TextNode.class.isInstance(errorNode))
-			{
-				String message = errorNode.asText();
-				if (message.equals("field_value_missing: 'account'") || 
-						message.equals("field_value_missing: 'creditor.name'") ||
-						message.equals("field_value_missing: 'creditor.postalCode'") ||
-						message.equals("field_value_missing: 'creditor.addressLine2'") ||
-						message.equals("field_value_missing: 'creditor.town'") ||
-						message.equals("field_value_missing: 'creditor.countryCode'") ||
-						message.equals("field_value_missing: 'currency'")
-				)
-				{
-					assertTrue(true);
-				}
-				else
-				{
-					assertFalse(true);
-				}
-			}
-			else
-			{
-				fail();
-			}
+			String errorMessage = node.next().asText();
+			if (errorMessage.equals("ref_invalid: 'reference'"))
+				assertEquals(errorMessage, "ref_invalid: 'reference'");
+			else if (errorMessage.equals("field_value_missing: 'account'"))
+				assertEquals(errorMessage, "field_value_missing: 'account'");
+			else if (errorMessage.equals("field_value_missing: 'creditor.name'"))
+				assertEquals(errorMessage, "field_value_missing: 'creditor.name'");
+			else if (errorMessage.equals("field_value_missing: 'creditor.town'"))
+				assertEquals(errorMessage, "field_value_missing: 'creditor.town'");
+			else if (errorMessage.equals("field_value_missing: 'creditor.countryCode'"))
+				assertEquals(errorMessage, "field_value_missing: 'creditor.countryCode'");
+			else if (errorMessage.equals("field_value_missing: 'creditor.postalCode'"))
+				assertEquals(errorMessage, "field_value_missing: 'creditor.postalCode'");
+			else if (errorMessage.equals("field_value_missing: 'creditor.addressLine2'"))
+				assertEquals(errorMessage, "field_value_missing: 'creditor.addressLine2'");
+			else if (errorMessage.equals("field_value_missing: 'currency'"))
+				assertEquals(errorMessage, "field_value_missing: 'currency'");
+			else fail();
 		}
 	}
 
@@ -135,42 +127,20 @@ public class QRBillTest
 		assertEquals("cannot process 'request': illegal json format", errorNode.asText());
 	}
 
-//	@Test
-//	public void testMappingParameters() throws IOException
-//	{
-//		ObjectNode requestNode = this.mapper.createObjectNode();
-//		requestNode.put(QRBill.Key.IBAN.key(), "CH450023023099999999A");
-//		requestNode.put(QRBill.Key.CURRENCY.key(), "CHF");
-//		ObjectNode creditor = requestNode.putObject("creditor");
-//		creditor.put(QRBill.Key.NAME.key(), "Christian Eugster");
-//		creditor.put(QRBill.Key.ADDRESS_LINE_1.key(), "Axensteinstrasse 27");
-//		creditor.put(QRBill.Key.ADDRESS_LINE_2.key(), "9000 St. Gallen");
-//		creditor.put(QRBill.Key.COUNTRY.key(), "CH");
-//		requestNode.set(Key.CREDITOR.key(), creditor);
-//		
-//		String response = QRBill.generate(requestNode.toString());
-//
-//		JsonNode responseNode = this.mapper.readTree(response);
-//		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
-//		JsonNode errorsNode = responseNode.get(Executor.ERRORS);
-//		assertEquals(ArrayNode.class, errorsNode.getClass());
-//		assertEquals(1, errorsNode.size());
-//		JsonNode errorNode = errorsNode.iterator().next();
-//		assertEquals("cannot process 'request': illegal json format", errorNode.asText());
-//	}
-
 	@Test
 	public void testMinimalParametersValid() throws JsonMappingException, JsonProcessingException
 	{
 		ObjectNode requestNode = this.mapper.createObjectNode();
 		requestNode.put(QRBill.Key.CURRENCY.key(), "CHF");
 		requestNode.put(QRBill.Key.IBAN.key(), "CH4431999123000889012");
-		requestNode.put(QRBill.Key.REFERENCE.key(), "00000000000000000000000000");
+		requestNode.put(QRBill.Key.REFERENCE.key(), "210000000003139471430009017");
 		ObjectNode creditor = requestNode.putObject("creditor");
 		creditor.put(QRBill.Key.NAME.key(), "Christian Eugster");
-		creditor.put(QRBill.Key.ADDRESS_LINE_1.key(), "Axensteinstrasse 27");
-		creditor.put(QRBill.Key.ADDRESS_LINE_2.key(), "9000 St. Gallen");
-		creditor.put(QRBill.Key.COUNTRY.key(), "CH");
+		creditor.put(QRBill.Key.STREET.key(), "Axensteinstrasse");
+		creditor.put(QRBill.Key.HOUSE_NO.key(), "27");
+		creditor.put(QRBill.Key.POSTAL_CODE.key(), "9000");
+		creditor.put(QRBill.Key.TOWN.key(), "St. Gallen");
+		creditor.put(QRBill.Key.COUNTRY_CODE.key(), "CH");
 
 		String response = QRBill.generate(requestNode.toString());
 
@@ -189,9 +159,11 @@ public class QRBillTest
 		requestNode.put(QRBill.Key.REFERENCE.key(), "RF49N73GBST73AKL38ZX");
 		ObjectNode creditor = requestNode.putObject("creditor");
 		creditor.put(QRBill.Key.NAME.key(), "Christian Eugster");
-		creditor.put(QRBill.Key.ADDRESS_LINE_1.key(), "Axensteinstrasse 7");
-		creditor.put(QRBill.Key.ADDRESS_LINE_2.key(), "9000 St. Gallen");
-		creditor.put(QRBill.Key.COUNTRY.key(), "CH");
+		creditor.put(QRBill.Key.STREET.key(), "Axensteinstrasse");
+		creditor.put(QRBill.Key.HOUSE_NO.key(), "27");
+		creditor.put(QRBill.Key.POSTAL_CODE.key(), "9000");
+		creditor.put(QRBill.Key.TOWN.key(), "St. Gallen");
+		creditor.put(QRBill.Key.COUNTRY_CODE.key(), "CH");
 
 		String response = QRBill.generate(requestNode.toString());
 
@@ -210,25 +182,28 @@ public class QRBillTest
 
 		JsonNode responseNode = mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
-		assertEquals(ArrayNode.class, responseNode.get(Executor.ERRORS).getClass());
-		assertEquals(7, responseNode.get(Executor.ERRORS).size());
+		JsonNode errorsNode = responseNode.get(Executor.ERRORS);
+		assertEquals(ArrayNode.class, errorsNode.getClass());
+		assertEquals(8, errorsNode.size());
 		ArrayNode errors = ArrayNode.class.cast(responseNode.get(Executor.ERRORS));
 		Iterator<JsonNode> node = errors.iterator();
 		while (node.hasNext())
 		{
 			String errorMessage = node.next().asText();
-			if (errorMessage.equals("field_value_missing: 'account'"))
+			if (errorMessage.equals("ref_invalid: 'reference'"))
+				assertEquals(errorMessage, "ref_invalid: 'reference'");
+			else if (errorMessage.equals("field_value_missing: 'account'"))
 				assertEquals(errorMessage, "field_value_missing: 'account'");
 			else if (errorMessage.equals("field_value_missing: 'creditor.name'"))
 				assertEquals(errorMessage, "field_value_missing: 'creditor.name'");
-			else if (errorMessage.equals("field_value_missing: 'creditor.postalCode'"))
-				assertEquals(errorMessage, "field_value_missing: 'creditor.postalCode'");
-			else if (errorMessage.equals("field_value_missing: 'creditor.addressLine2'"))
-				assertEquals(errorMessage, "field_value_missing: 'creditor.addressLine2'");
 			else if (errorMessage.equals("field_value_missing: 'creditor.town'"))
 				assertEquals(errorMessage, "field_value_missing: 'creditor.town'");
 			else if (errorMessage.equals("field_value_missing: 'creditor.countryCode'"))
 				assertEquals(errorMessage, "field_value_missing: 'creditor.countryCode'");
+			else if (errorMessage.equals("field_value_missing: 'creditor.postalCode'"))
+				assertEquals(errorMessage, "field_value_missing: 'creditor.postalCode'");
+			else if (errorMessage.equals("field_value_missing: 'creditor.addressLine2'"))
+				assertEquals(errorMessage, "field_value_missing: 'creditor.addressLine2'");
 			else if (errorMessage.equals("field_value_missing: 'currency'"))
 				assertEquals(errorMessage, "field_value_missing: 'currency'");
 			else fail();
@@ -241,12 +216,14 @@ public class QRBillTest
 		ObjectNode requestNode = this.mapper.createObjectNode();
 		requestNode.put(QRBill.Key.CURRENCY.key(), "CHF");
 		requestNode.put(QRBill.Key.IBAN.key(), "IT12V0827358981000302206625");
-		requestNode.put(QRBill.Key.REFERENCE.key(), "00000000000000000000000000");
+		requestNode.put(QRBill.Key.REFERENCE.key(), "210000000003139471430009017");
 		ObjectNode creditor = requestNode.putObject("creditor");
 		creditor.put(QRBill.Key.NAME.key(), "Christian Eugster");
-		creditor.put(QRBill.Key.ADDRESS_LINE_1.key(), "Axensteinstrasse 27");
-		creditor.put(QRBill.Key.ADDRESS_LINE_2.key(), "9000 St. Gallen");
-		creditor.put(QRBill.Key.COUNTRY.key(), "CH");
+		creditor.put(QRBill.Key.STREET.key(), "Axensteinstrasse");
+		creditor.put(QRBill.Key.HOUSE_NO.key(), "27");
+		creditor.put(QRBill.Key.POSTAL_CODE.key(), "9000");
+		creditor.put(QRBill.Key.TOWN.key(), "St. Gallen");
+		creditor.put(QRBill.Key.COUNTRY_CODE.key(), "CH");
 
 		String response = QRBill.generate(requestNode.toString());
 
@@ -262,12 +239,14 @@ public class QRBillTest
 		ObjectNode requestNode = this.mapper.createObjectNode();
 		requestNode.put(QRBill.Key.CURRENCY.key(), "CHF");
 		requestNode.put(QRBill.Key.IBAN.key(), "CH6309000000901197203");
-		requestNode.put(QRBill.Key.REFERENCE.key(), "00000000000000000000000000");
+		requestNode.put(QRBill.Key.REFERENCE.key(), "210000000003139471430009017");
 		ObjectNode creditor = requestNode.putObject("creditor");
 		creditor.put(QRBill.Key.NAME.key(), "Christian Eugster");
-		creditor.put(QRBill.Key.ADDRESS_LINE_1.key(), "Axensteinstrasse 27");
-		creditor.put(QRBill.Key.ADDRESS_LINE_2.key(), "9000 St. Gallen");
-		creditor.put(QRBill.Key.COUNTRY.key(), "CH");
+		creditor.put(QRBill.Key.STREET.key(), "Axensteinstrasse");
+		creditor.put(QRBill.Key.HOUSE_NO.key(), "27");
+		creditor.put(QRBill.Key.POSTAL_CODE.key(), "9000");
+		creditor.put(QRBill.Key.TOWN.key(), "St. Gallen");
+		creditor.put(QRBill.Key.COUNTRY_CODE.key(), "CH");
 
 		String response = QRBill.generate(requestNode.toString());
 
@@ -283,12 +262,14 @@ public class QRBillTest
 		ObjectNode requestNode = this.mapper.createObjectNode();
 		requestNode.put(QRBill.Key.CURRENCY.key(), "USD");
 		requestNode.put(QRBill.Key.IBAN.key(), "CH4431999123000889012");
-		requestNode.put(QRBill.Key.REFERENCE.key(), "00000000000000000000000000");
+		requestNode.put(QRBill.Key.REFERENCE.key(), "210000000003139471430009017");
 		ObjectNode creditor = requestNode.putObject("creditor");
 		creditor.put(QRBill.Key.NAME.key(), "Christian Eugster");
-		creditor.put(QRBill.Key.ADDRESS_LINE_1.key(), "Axensteinstrasse 27");
-		creditor.put(QRBill.Key.ADDRESS_LINE_2.key(), "9000 St. Gallen");
-		creditor.put(QRBill.Key.COUNTRY.key(), "CH");
+		creditor.put(QRBill.Key.STREET.key(), "Axensteinstrasse");
+		creditor.put(QRBill.Key.HOUSE_NO.key(), "27");
+		creditor.put(QRBill.Key.POSTAL_CODE.key(), "9000");
+		creditor.put(QRBill.Key.TOWN.key(), "St. Gallen");
+		creditor.put(QRBill.Key.COUNTRY_CODE.key(), "CH");
 
 		String response = QRBill.generate(requestNode.toString());
 
@@ -307,9 +288,11 @@ public class QRBillTest
 		requestNode.put(QRBill.Key.REFERENCE.key(), "FS000000000000000000000000");
 		ObjectNode creditor = requestNode.putObject("creditor");
 		creditor.put(QRBill.Key.NAME.key(), "Christian Eugster");
-		creditor.put(QRBill.Key.ADDRESS_LINE_1.key(), "Axensteinstrasse 27");
-		creditor.put(QRBill.Key.ADDRESS_LINE_2.key(), "9000 St. Gallen");
-		creditor.put(QRBill.Key.COUNTRY.key(), "CH");
+		creditor.put(QRBill.Key.STREET.key(), "Axensteinstrasse");
+		creditor.put(QRBill.Key.HOUSE_NO.key(), "27");
+		creditor.put(QRBill.Key.POSTAL_CODE.key(), "9000");
+		creditor.put(QRBill.Key.TOWN.key(), "St. Gallen");
+		creditor.put(QRBill.Key.COUNTRY_CODE.key(), "CH");
 
 		String response = QRBill.generate(requestNode.toString());
 
@@ -328,18 +311,22 @@ public class QRBillTest
 		requestNode.put("amount", new BigDecimal(350));
 		requestNode.put(QRBill.Key.CURRENCY.key(), "CHF");
 		requestNode.put(QRBill.Key.IBAN.key(), "CH4431999123000889012");
-		requestNode.put(QRBill.Key.REFERENCE.key(), "00000000000000000000000000");
+		requestNode.put(QRBill.Key.REFERENCE.key(), "210000000003139471430009017");
 		requestNode.put("message", "Abonnement für 2020");
 		ObjectNode creditor = requestNode.putObject("creditor");
 		creditor.put(QRBill.Key.NAME.key(), "Christian Eugster");
-		creditor.put(QRBill.Key.ADDRESS_LINE_1.key(), "Axensteinstrasse 27");
-		creditor.put(QRBill.Key.ADDRESS_LINE_2.key(), "9000 St. Gallen");
-		creditor.put(QRBill.Key.COUNTRY.key(), "CH");
+		creditor.put(QRBill.Key.STREET.key(), "Axensteinstrasse");
+		creditor.put(QRBill.Key.HOUSE_NO.key(), "27");
+		creditor.put(QRBill.Key.POSTAL_CODE.key(), "9000");
+		creditor.put(QRBill.Key.TOWN.key(), "St. Gallen");
+		creditor.put(QRBill.Key.COUNTRY_CODE.key(), "CH");
 		ObjectNode debtor = requestNode.putObject("debtor");
 		debtor.put(QRBill.Key.NAME.key(), "Christian Eugster");
-		debtor.put(QRBill.Key.ADDRESS_LINE_1.key(), "Axensteinstrasse 27");
-		debtor.put(QRBill.Key.ADDRESS_LINE_2.key(), "9000 St. Gallen");
-		debtor.put(QRBill.Key.COUNTRY.key(), "CH");
+		debtor.put(QRBill.Key.STREET.key(), "Axensteinstrasse");
+		debtor.put(QRBill.Key.HOUSE_NO.key(), "27");
+		debtor.put(QRBill.Key.POSTAL_CODE.key(), "9000");
+		debtor.put(QRBill.Key.TOWN.key(), "St. Gallen");
+		debtor.put(QRBill.Key.COUNTRY_CODE.key(), "CH");
 		ObjectNode form = requestNode.putObject("format");
 		form.put(QRBill.Key.GRAPHICS_FORMAT.key(), GraphicsFormat.PDF.name());
 		form.put(QRBill.Key.OUTPUT_SIZE.key(), OutputSize.A4_PORTRAIT_SHEET.name());
@@ -354,17 +341,108 @@ public class QRBillTest
 	}
 
 	@Test
+	public void testWithReferenceLength26() throws IOException
+	{
+		this.copyConfiguration("src/test/resources/cfg/qrbill_all.json");
+
+		ObjectNode requestNode = mapper.createObjectNode();
+		requestNode.put("amount", new BigDecimal(350));
+		requestNode.put(QRBill.Key.CURRENCY.key(), "CHF");
+		requestNode.put(QRBill.Key.IBAN.key(), "CH4431999123000889012");
+		requestNode.put(QRBill.Key.REFERENCE.key(), "21000000000313947143000901");
+		requestNode.put("message", "Abonnement für 2020");
+		ObjectNode creditor = requestNode.putObject("creditor");
+		creditor.put(QRBill.Key.NAME.key(), "Christian Eugster");
+		creditor.put(QRBill.Key.STREET.key(), "Axensteinstrasse");
+		creditor.put(QRBill.Key.HOUSE_NO.key(), "27");
+		creditor.put(QRBill.Key.POSTAL_CODE.key(), "9000");
+		creditor.put(QRBill.Key.TOWN.key(), "St. Gallen");
+		creditor.put(QRBill.Key.COUNTRY_CODE.key(), "CH");
+		ObjectNode debtor = requestNode.putObject("debtor");
+		debtor.put(QRBill.Key.NAME.key(), "Christian Eugster");
+		debtor.put(QRBill.Key.STREET.key(), "Axensteinstrasse");
+		debtor.put(QRBill.Key.HOUSE_NO.key(), "27");
+		debtor.put(QRBill.Key.POSTAL_CODE.key(), "9000");
+		debtor.put(QRBill.Key.TOWN.key(), "St. Gallen");
+		debtor.put(QRBill.Key.COUNTRY_CODE.key(), "CH");
+		ObjectNode form = requestNode.putObject("format");
+		form.put(QRBill.Key.GRAPHICS_FORMAT.key(), GraphicsFormat.PDF.name());
+		form.put(QRBill.Key.OUTPUT_SIZE.key(), OutputSize.A4_PORTRAIT_SHEET.name());
+		form.put(QRBill.Key.LANGUAGE.key(), Language.DE.name());
+
+		String response = QRBill.generate(requestNode.toString());
+		
+		JsonNode responseNode = mapper.readTree(response);
+		assertEquals(Executor.OK, responseNode.get(Executor.STATUS).asText());
+		assertNotNull(responseNode.get(Executor.RESULT));
+		assertNull(responseNode.get(Executor.ERRORS));
+	}
+
+	@Test
+	public void testInvalidAddress() throws IOException
+	{
+		this.copyConfiguration("src/test/resources/cfg/qrbill_all.json");
+
+		ObjectNode requestNode = mapper.createObjectNode();
+		requestNode.put("amount", new BigDecimal(350));
+		requestNode.put(QRBill.Key.CURRENCY.key(), "CHF");
+		requestNode.put(QRBill.Key.IBAN.key(), "CH4431999123000889012");
+		requestNode.put(QRBill.Key.REFERENCE.key(), "210000000003139471430009017");
+		requestNode.put("message", "Abonnement für 2020");
+		ObjectNode creditor = requestNode.putObject("creditor");
+		creditor.put(QRBill.Key.STREET.key(), "Axensteinstrasse");
+		ObjectNode debtor = requestNode.putObject("debtor");
+		debtor.put(QRBill.Key.STREET.key(), "Axensteinstrasse");
+		ObjectNode form = requestNode.putObject("format");
+		form.put(QRBill.Key.GRAPHICS_FORMAT.key(), GraphicsFormat.PDF.name());
+		form.put(QRBill.Key.OUTPUT_SIZE.key(), OutputSize.A4_PORTRAIT_SHEET.name());
+		form.put(QRBill.Key.LANGUAGE.key(), Language.DE.name());
+
+		String response = QRBill.generate(requestNode.toString());
+		
+		JsonNode responseNode = mapper.readTree(response);
+		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
+		assertEquals(ArrayNode.class, responseNode.get(Executor.ERRORS).getClass());
+		assertEquals(8, responseNode.get(Executor.ERRORS).size());
+		ArrayNode errors = ArrayNode.class.cast(responseNode.get(Executor.ERRORS));
+		Iterator<JsonNode> node = errors.iterator();
+		while (node.hasNext())
+		{
+			String errorMessage = node.next().asText();
+			if (errorMessage.equals("field_value_missing: 'creditor.name'"))
+				assertEquals(errorMessage, "field_value_missing: 'creditor.name'");
+			else if (errorMessage.equals("field_value_missing: 'creditor.postalCode'"))
+				assertEquals(errorMessage, "field_value_missing: 'creditor.postalCode'");
+			else if (errorMessage.equals("field_value_missing: 'creditor.town'"))
+				assertEquals(errorMessage, "field_value_missing: 'creditor.town'");
+			else if (errorMessage.equals("field_value_missing: 'creditor.countryCode'"))
+				assertEquals(errorMessage, "field_value_missing: 'creditor.countryCode'");
+			else if (errorMessage.equals("field_value_missing: 'debtor.name'"))
+				assertEquals(errorMessage, "field_value_missing: 'debtor.name'");
+			else if (errorMessage.equals("field_value_missing: 'debtor.postalCode'"))
+				assertEquals(errorMessage, "field_value_missing: 'debtor.postalCode'");
+			else if (errorMessage.equals("field_value_missing: 'debtor.town'"))
+				assertEquals(errorMessage, "field_value_missing: 'debtor.town'");
+			else if (errorMessage.equals("field_value_missing: 'debtor.countryCode'"))
+				assertEquals(errorMessage, "field_value_missing: 'debtor.countryCode'");
+			else fail();
+		}
+	}
+
+	@Test
 	public void testInvalidGraphicsFormat() throws JsonMappingException, JsonProcessingException
 	{
 		ObjectNode requestNode = this.mapper.createObjectNode();
 		requestNode.put(QRBill.Key.CURRENCY.key(), "USD");
 		requestNode.put(QRBill.Key.IBAN.key(), "CH6309000000901197203");
-		requestNode.put(QRBill.Key.REFERENCE.key(), "00000000000000000000000000");
+		requestNode.put(QRBill.Key.REFERENCE.key(), "210000000003139471430009017");
 		ObjectNode creditor = requestNode.putObject("creditor");
 		creditor.put(QRBill.Key.NAME.key(), "Christian Eugster");
-		creditor.put(QRBill.Key.ADDRESS_LINE_1.key(), "Axensteinstrasse 27");
-		creditor.put(QRBill.Key.ADDRESS_LINE_2.key(), "9000 St. Gallen");
-		creditor.put(QRBill.Key.COUNTRY.key(), "CH");
+		creditor.put(QRBill.Key.STREET.key(), "Axensteinstrasse");
+		creditor.put(QRBill.Key.HOUSE_NO.key(), "27");
+		creditor.put(QRBill.Key.POSTAL_CODE.key(), "9000");
+		creditor.put(QRBill.Key.TOWN.key(), "St. Gallen");
+		creditor.put(QRBill.Key.COUNTRY_CODE.key(), "CH");
 		ObjectNode form = requestNode.putObject("format");
 		form.put(QRBill.Key.GRAPHICS_FORMAT.key(), "blabla");
 		form.put(QRBill.Key.LANGUAGE.key(), Language.IT.toString());
@@ -376,7 +454,7 @@ public class QRBillTest
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
 		assertEquals(
-				"invalid_json_format_parameter 'No enum constant net.codecrete.qrbill.generator.GraphicsFormat.blabla'",
+				"invalid_json_format_parameter: 'No enum constant net.codecrete.qrbill.generator.GraphicsFormat.blabla'",
 				responseNode.get(Executor.ERRORS).get(0).asText());
 	}
 
@@ -386,12 +464,14 @@ public class QRBillTest
 		ObjectNode requestNode = this.mapper.createObjectNode();
 		requestNode.put(QRBill.Key.CURRENCY.key(), "USD");
 		requestNode.put(QRBill.Key.IBAN.key(), "CH6309000000901197203");
-		requestNode.put(QRBill.Key.REFERENCE.key(), "00000000000000000000000000");
+		requestNode.put(QRBill.Key.REFERENCE.key(), "210000000003139471430009017");
 		ObjectNode creditor = requestNode.putObject("creditor");
 		creditor.put(QRBill.Key.NAME.key(), "Christian Eugster");
-		creditor.put(QRBill.Key.ADDRESS_LINE_1.key(), "Axensteinstrasse 27");
-		creditor.put(QRBill.Key.ADDRESS_LINE_2.key(), "9000 St. Gallen");
-		creditor.put(QRBill.Key.COUNTRY.key(), "CH");
+		creditor.put(QRBill.Key.STREET.key(), "Axensteinstrasse");
+		creditor.put(QRBill.Key.HOUSE_NO.key(), "27");
+		creditor.put(QRBill.Key.POSTAL_CODE.key(), "9000");
+		creditor.put(QRBill.Key.TOWN.key(), "St. Gallen");
+		creditor.put(QRBill.Key.COUNTRY_CODE.key(), "CH");
 		ObjectNode form = requestNode.putObject("format");
 		form.put(QRBill.Key.GRAPHICS_FORMAT.key(), GraphicsFormat.PDF.toString());
 		form.put(QRBill.Key.LANGUAGE.key(), "blabla");
@@ -402,7 +482,7 @@ public class QRBillTest
 		JsonNode responseNode = mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
-		assertEquals("invalid_json_format_parameter 'No enum constant net.codecrete.qrbill.generator.Language.blabla'",
+		assertEquals("invalid_json_format_parameter: 'No enum constant net.codecrete.qrbill.generator.Language.blabla'",
 				responseNode.get(Executor.ERRORS).get(0).asText());
 	}
 
@@ -412,12 +492,14 @@ public class QRBillTest
 		ObjectNode requestNode = this.mapper.createObjectNode();
 		requestNode.put(QRBill.Key.CURRENCY.key(), "USD");
 		requestNode.put(QRBill.Key.IBAN.key(), "CH6309000000901197203");
-		requestNode.put(QRBill.Key.REFERENCE.key(), "00000000000000000000000000");
+		requestNode.put(QRBill.Key.REFERENCE.key(), "210000000003139471430009017");
 		ObjectNode creditor = requestNode.putObject("creditor");
 		creditor.put(QRBill.Key.NAME.key(), "Christian Eugster");
-		creditor.put(QRBill.Key.ADDRESS_LINE_1.key(), "Axensteinstrasse 27");
-		creditor.put(QRBill.Key.ADDRESS_LINE_2.key(), "9000 St. Gallen");
-		creditor.put(QRBill.Key.COUNTRY.key(), "CH");
+		creditor.put(QRBill.Key.STREET.key(), "Axensteinstrasse");
+		creditor.put(QRBill.Key.HOUSE_NO.key(), "27");
+		creditor.put(QRBill.Key.POSTAL_CODE.key(), "9000");
+		creditor.put(QRBill.Key.TOWN.key(), "St. Gallen");
+		creditor.put(QRBill.Key.COUNTRY_CODE.key(), "CH");
 		ObjectNode form = requestNode.putObject("format");
 		form.put(QRBill.Key.GRAPHICS_FORMAT.key(), GraphicsFormat.PDF.toString());
 		form.put(QRBill.Key.LANGUAGE.key(), Language.IT.toString());
@@ -429,24 +511,25 @@ public class QRBillTest
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
 		assertEquals(
-				"invalid_json_format_parameter 'No enum constant net.codecrete.qrbill.generator.OutputSize.blabla'",
+				"invalid_json_format_parameter: 'No enum constant net.codecrete.qrbill.generator.OutputSize.blabla'",
 				responseNode.get(Executor.ERRORS).get(0).asText());
 	}
 
 	@Test
 	public void testFromFileMaker() throws IOException
 	{
-		String request = "{\"amount\":751.75,\"creditor\":{\"address_line_1\":\"Fürstenlandstrasse 101\",\"address_line_2\":\"9014 St. Gallen\",\"country\":\"CH\",\"name\":\"CopyArt\"},\"currency\":\"CHF\",\"debtor\":{\"address_line_1\":\"Neugasse 1\",\"address_line_2\":\"9004 St. Gallen\",\"country\":\"CH\",\"name\":\"Hochbauamt Stadt St.Gallen\"},\"format\":{\"graphics_format\":\"PDF\",\"language\":\"DE\",\"output_size\":\"QR_BILL_ONLY\"},\"iban\":\"CH5909000000900221261\"}";
+		String request = "{\"amount\":751.75,\"creditor\":{\"street\":\"Fürstenlandstrasse\",\"houseNo\":\"101\",\"postalCode\":\"9014\",\"town\":\"St. Gallen\",\"countryCode\":\"CH\",\"name\":\"CopyArt\"},\"currency\":\"CHF\",\"debtor\":{\"street\":\"Neugasse\",\"houseNo\":\"1\",\"postalCode\":\"9004\",\"town\":\"St. Gallen\",\"countryCode\":\"CH\",\"name\":\"Hochbauamt Stadt St.Gallen\"},\"format\":{\"graphics_format\":\"PDF\",\"language\":\"DE\",\"output_size\":\"QR_BILL_ONLY\"},\"iban\":\"CH5909000000900221261\",\"reference\":\"RF49N73GBST73AKL38ZX\"}";
 
 		String response = QRBill.generate(request);
 
 		JsonNode responseNode = mapper.readTree(response);
+		assertEquals(Executor.OK, responseNode.get(Executor.STATUS).asText());
+		assertNull(responseNode.get(Executor.ERRORS));
+		assertNotNull(responseNode.get("result"));
 		byte[] result = responseNode.get("result").binaryValue();
 		File file = new File("/Users/christian/qrbill.pdf");
 		OutputStream os = new FileOutputStream(file);
 		os.write(result);
 		os.close();
-		assertEquals(Executor.OK, responseNode.get(Executor.STATUS).asText());
-		assertNull(responseNode.get(Executor.ERRORS));
 	}
 }

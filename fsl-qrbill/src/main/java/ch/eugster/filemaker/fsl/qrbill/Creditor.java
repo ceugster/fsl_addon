@@ -7,14 +7,20 @@ public class Creditor
 	@JsonProperty("name")
 	private String name;
 
-	@JsonProperty("address")
-	private String address;
+	@JsonProperty("street")
+	private String street;
 
-	@JsonProperty("city")
-	private String city;
+	@JsonProperty("houseNo")
+	private String houseNo;
+
+	@JsonProperty("postalCode")
+	private String postalCode;
 	
-	@JsonProperty("country")
-	private String country;
+	@JsonProperty("town")
+	private String town;
+	
+	@JsonProperty("countryCode")
+	private String countryCode;
 
 	public String getName()
 	{
@@ -26,33 +32,53 @@ public class Creditor
 		this.name = name;
 	}
 
-	public String getAddress()
+	public String getStreet()
 	{
-		return address;
+		return street;
 	}
 
-	public void setAddress(String address)
+	public void setStreet(String street)
 	{
-		this.address = address;
+		this.street = street;
 	}
 
-	public String getCity()
+	public String getHouseNo()
 	{
-		return city;
+		return this.houseNo;
 	}
 
-	public void setCity(String city)
+	public void setHouseNo(String houseNo)
 	{
-		this.city = city;
+		this.houseNo = houseNo;
 	}
 
-	public String getCountry()
+	public String getPostalCode()
 	{
-		return country;
+		return postalCode;
 	}
 
-	public void setCountry(String country)
+	public void setPostalCode(String postalCode)
 	{
-		this.country = country;
+		this.postalCode = postalCode;
+	}
+
+	public String getTown()
+	{
+		return town;
+	}
+
+	public void setTown(String town)
+	{
+		this.town = town;
+	}
+
+	public String getCountryCode()
+	{
+		return countryCode;
+	}
+
+	public void setCountryCode(String countryCode)
+	{
+		this.countryCode = countryCode;
 	}
 }

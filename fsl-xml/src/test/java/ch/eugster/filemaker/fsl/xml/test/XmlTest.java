@@ -3,6 +3,7 @@ package ch.eugster.filemaker.fsl.xml.test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -42,22 +43,30 @@ public class XmlTest extends AbstractTest
 	{
 		File file = new File(xmlFromJsonFilename);
 		InputStream is = new FileInputStream(file);
-		byte[] bytes = is.readAllBytes();
+		byte[] bytes = new byte[is.available()];
+		DataInputStream dataInputStream = new DataInputStream(is);
+		dataInputStream.readFully(bytes);
 		expectedXmlContent = new String(bytes).replaceAll("\\s", "");
 		is.close();
 		file = new File(jsonFromXmlFilename);
 		is = new FileInputStream(file);
-		bytes = is.readAllBytes();
+		bytes = new byte[is.available()];
+		dataInputStream = new DataInputStream(is);
+		dataInputStream.readFully(bytes);
 		expectedJsonContent = new String(bytes).replaceAll("\\s", "");
 		is.close();
 		file = new File(xmlFilename);
 		is = new FileInputStream(file);
-		bytes = is.readAllBytes();
+		bytes = new byte[is.available()];
+		dataInputStream = new DataInputStream(is);
+		dataInputStream.readFully(bytes);
 		xmlContent = new String(bytes);
 		is.close();
 		file = new File(jsonFilename);
 		is = new FileInputStream(file);
-		bytes = is.readAllBytes();
+		bytes = new byte[is.available()];
+		dataInputStream = new DataInputStream(is);
+		dataInputStream.readFully(bytes);
 		jsonContent = new String(bytes);
 		is.close();
 	}
