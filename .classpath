@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="fsl-camt/src/main/java/|fsl-camt/src/main/java/|fsl-camt/src/test/java/|fsl-camt/src/test/java/|fsl-outlook/src/main/java/|fsl-outlook/src/main/java/|fsl-qrbill/src/main/java/|fsl-qrbill/src/main/java/|fsl-qrbill/src/test/java/|fsl-qrbill/src/test/java/|fsl-xls/src/main/java/|fsl-xls/src/main/java/|fsl-xls/src/test/java/|fsl-xls/src/test/java/|fsl-xml/src/main/java/|fsl-xml/src/main/java/|fsl-xml/src/test/java/|fsl-xml/src/test/java/" kind="src" path=""/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
