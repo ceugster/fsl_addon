@@ -147,6 +147,11 @@
 			<version>${pdfbox.version}</version>
 		</dependency>
 		<dependency>
+    		<groupId>org.apache.pdfbox</groupId>
+    		<artifactId>pdfbox-io</artifactId>
+			<version>${pdfbox.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.pdfbox</groupId>
 			<artifactId>fontbox</artifactId>
 			<version>${pdfbox.version}</version>
