@@ -147,6 +147,31 @@ public class QRBillTest
 		JsonNode responseNode = mapper.readTree(response);
 		assertEquals(Executor.OK, responseNode.get(Executor.STATUS).asText());
 		assertNotNull(responseNode.get(Executor.RESULT));
+		assertEquals("210000000003139471430009017", responseNode.get("reference").asText());
+		assertNull(responseNode.get(Executor.ERRORS));
+	}
+
+	@Test
+	public void testMinimalParametersValidRef26() throws JsonMappingException, JsonProcessingException
+	{
+		ObjectNode requestNode = this.mapper.createObjectNode();
+		requestNode.put(QRBill.Key.CURRENCY.key(), "CHF");
+		requestNode.put(QRBill.Key.IBAN.key(), "CH4431999123000889012");
+		requestNode.put(QRBill.Key.REFERENCE.key(), "21000000000313947143000901");
+		ObjectNode creditor = requestNode.putObject("creditor");
+		creditor.put(QRBill.Key.NAME.key(), "Christian Eugster");
+		creditor.put(QRBill.Key.STREET.key(), "Axensteinstrasse");
+		creditor.put(QRBill.Key.HOUSE_NO.key(), "27");
+		creditor.put(QRBill.Key.POSTAL_CODE.key(), "9000");
+		creditor.put(QRBill.Key.TOWN.key(), "St. Gallen");
+		creditor.put(QRBill.Key.COUNTRY_CODE.key(), "CH");
+
+		String response = QRBill.generate(requestNode.toString());
+
+		JsonNode responseNode = mapper.readTree(response);
+		assertEquals(Executor.OK, responseNode.get(Executor.STATUS).asText());
+		assertNotNull(responseNode.get(Executor.RESULT));
+		assertEquals("210000000003139471430009017", responseNode.get("reference").asText());
 		assertNull(responseNode.get(Executor.ERRORS));
 	}
 
@@ -518,7 +543,8 @@ public class QRBillTest
 	@Test
 	public void testFromFileMaker() throws IOException
 	{
-		String request = "{\"amount\":751.75,\"creditor\":{\"street\":\"Fürstenlandstrasse\",\"houseNo\":\"101\",\"postalCode\":\"9014\",\"town\":\"St. Gallen\",\"countryCode\":\"CH\",\"name\":\"CopyArt\"},\"currency\":\"CHF\",\"debtor\":{\"street\":\"Neugasse\",\"houseNo\":\"1\",\"postalCode\":\"9004\",\"town\":\"St. Gallen\",\"countryCode\":\"CH\",\"name\":\"Hochbauamt Stadt St.Gallen\"},\"format\":{\"graphics_format\":\"PDF\",\"language\":\"DE\",\"output_size\":\"QR_BILL_ONLY\"},\"iban\":\"CH5909000000900221261\",\"reference\":\"RF49N73GBST73AKL38ZX\"}";
+		String request = "{\"amount\":124.2,\"creditor\":{\"countryCode\":\"CH\",\"houseNo\":\"101\",\"name\":\"Copy Art AG\",\"postalCode\":\"9014\",\"street\":\"Industriestrasse\",\"town\":\"St. Gallen\"},\"currency\":\"CHF\",\"debtor\":{\"countryCode\":\"CH\",\"houseNo\":\"149\",\"name\":\"KA Boom AG,  \",\"postalCode\":\"9200\",\"town\":\"Gossau SG\"},\"format\":{\"graphics_format\":\"PDF\",\"language\":\"DE\",\"output_size\":\"QR_BILL_ONLY\"},\"iban\":\"CH4431999123000889012\",\"message\":\"Rechnung Nr. 30.10.2012\",\"reference\":\"00000012123000000020121030\"}";
+//		String request = "{\"amount\":751.75,\"creditor\":{\"street\":\"Fürstenlandstrasse\",\"houseNo\":\"101\",\"postalCode\":\"9014\",\"town\":\"St. Gallen\",\"countryCode\":\"CH\",\"name\":\"CopyArt\"},\"currency\":\"CHF\",\"debtor\":{\"street\":\"Neugasse\",\"houseNo\":\"1\",\"postalCode\":\"9004\",\"town\":\"St. Gallen\",\"countryCode\":\"CH\",\"name\":\"Hochbauamt Stadt St.Gallen\"},\"format\":{\"graphics_format\":\"PDF\",\"language\":\"DE\",\"output_size\":\"QR_BILL_ONLY\"},\"iban\":\"CH5909000000900221261\",\"reference\":\"RF49N73GBST73AKL38ZX\"}";
 
 		String response = QRBill.generate(request);
 

@@ -180,6 +180,7 @@ public class QRBill extends Executor
 				{
 					reference = checkString(requestNode, key);
 				}
+				getResponseNode().put("reference", reference);
 			}			
 		}
 		return reference;

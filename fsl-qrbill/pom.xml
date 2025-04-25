@@ -11,6 +11,7 @@
 
 	<artifactId>fsl-qrbill</artifactId>
 	<packaging>jar</packaging>
+	<version>1.1.4</version>
 
 	<name>QRBill Generator</name>
 	<description>QRBill Generator generates Swiss QRBills</description>
