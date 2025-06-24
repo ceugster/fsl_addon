@@ -1,5 +1,5 @@
 # fsl_addon
-## Now supports version 2.3 of swiss payment standards
+
 ## General
 
 **fsl_addon** was previously thought as plugin for FileMaker based on ScriptMaster by 360works. Because the function of creating custom plugins has not been successfull (and has been withdrawn in the meantime from the ScriptMaster plugin), I have choosen an alternative way to publish my "plugins".
@@ -9,7 +9,8 @@ The Add Ons depend on the ScriptMaster plugin by 360works, downloadable from the
 For now there are four addons available:
 
 - addon_fsl_camt:	Converts XML CAMT files to JSON and vice versa
-- addon_fsl_qrbill:	Generates Swiss QRBill invoices
+- addon_fsl_qrbill:	Generates Swiss QRBill invoices ## Now supports version 2.3 of swiss payment standards
+
 - addon_fsl_xml:	Converts XML files to JSON and vice versa
 - addon_fsl_xls:	Creates and populates Excel Workbooks
 
