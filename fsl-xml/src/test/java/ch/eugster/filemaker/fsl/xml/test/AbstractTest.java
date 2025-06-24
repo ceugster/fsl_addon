@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ch.eugster.filemaker.fsl.xml.Xml;
 
-public abstract class AbstractTest
+public abstract class AbstractTest extends Xml
 {
 	protected static ObjectMapper mapper = new ObjectMapper();
 
