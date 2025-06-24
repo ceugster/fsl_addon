@@ -23,9 +23,10 @@ For now there are four addons available:
 
 FileMaker exports the addon into the "Extensions/AddonModules" folder.
 
-## Example
 
-Example: You want to create a swiss qrbill in FileMaker:
+## qrbill_addon
+
+Example 1: You want to create a swiss qrbill in FileMaker:
 
 After the installation you
 
@@ -90,6 +91,43 @@ If [ $status = "Fehler" ]
 		Exit Loop If [ $index > $count ]         
     End Loop
 End If   
+```
+Example 2: Generate a QRCode
+
+1. Create a json object with name e.g. **$request** and provide elements to it.
+   Valid elements are:
+   - mandatory: "value" Type JSONString, contains the value from which a QRCode will be generated
+   - optional: "scale" Type JSONNumber, scales the size of the QRCode, possible values: >= 1, defaults to 4
+   - optional: "border" Type JSONNumber, scales the border around the QRCode, possible values: >= 0, defaults to 10
+   - optional: "color_light" Type JSONNumber, used for the light parts of the QRCode (e.g. white), possible values: between 0x000000 and 0xFFFFFF, defaults to 0xFFFFFF
+   - optional: "color_dark" Type JSONNumber, used for the dark parts of the QRCode (e.g. black), possible values: between 0x000000 and 0xFFFFFF, defaults to 0x000000
+   - optional: "ecc" Type JSONNumber, sets the error correction level possible values: >= 0 && <= 3, defaults to 0
+   - optional: graphics_format Type JSONString, defines the file format of the QRCode, defaults to "PNG"
+
+```
+set variable [ $request ; value: 
+JSONSetElement ( $request ; 
+[ "value" ; "Hello World" ; JSONNumber ] ;
+[ "scale" ; 6 ; JSONNumber ] ;
+[ "border" ; 6 ; JSONNumber ] ;
+[ "color_light" ; 0xEEEEEE ; JSONNumber] ;
+[ "color_dark" ; 0x111111 ; JSONNumber ] ;
+[ "ecc" ; 1 ; JSONNumber ] ;
+[ "creditor.street" ; "Uetlibergstrasse" ; JSONString ] ;
+[ "creditor.houseNo" ; "138" ; JSONString ] ;
+[ "creditor.postalCode" ; "8045" ; JSONString ] ;
+[ "creditor.town" ; "Zürich" ; JSONString ] ;
+[ "creditor.countryCode" ; "CH" ; JSONString ] ;
+[ "debtor.name" ; "Simon Glarner" ; JSONString ] ;
+[ "debtor.street" ; "Bächliwis" ; JSONString ] ;
+[ "debtor.houseNo" ; "55" ; JSONString ] ;
+[ "debtor.postalCode" ; "8184" ; JSONString ] ;
+[ "creditor.town" ; "Bachenbülach" ; JSONString ] ;
+[ "debtor.countryCode" ; "CH" ; JSONString ] ;
+[ "format.graphics_format" ; "PDF" ; JSONString ] ;
+[ "format.output_size" ; "QR_BILL_EXTRA_SPACE" ; JSONString ] ;
+[ "format.language" ; "DE" ; JSONString ]
+)
 ```
 
 ## xls_addon 
