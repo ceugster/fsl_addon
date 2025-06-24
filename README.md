@@ -10,7 +10,7 @@ For now there are four addons available:
 
 - addon_fsl_camt:	Converts XML CAMT files to JSON and vice versa
 - addon_fsl_qrbill:	Generates Swiss QRBill invoices
-  ## Now supports version 2.3 of swiss payment standards
+  #### Now supports version 2.3 of swiss payment standards
 
 - addon_fsl_xml:	Converts XML files to JSON and vice versa
 - addon_fsl_xls:	Creates and populates Excel Workbooks
