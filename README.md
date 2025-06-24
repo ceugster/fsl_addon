@@ -34,26 +34,26 @@ After the installation you
 ```
 set variable [ $request ; value: 
 JSONSetElement ( $request ; 
-| "amount" ; 287.3 ; JSONNumber ] ;
-| "currency" ; "CHF" ; JSONString ] ;
-| "iban" ; "CH4431999123000889012" ; JSONString ] ;
-| "reference" ; "000000000000000000000000000" ; JSONString] ;
-| "message" ; "Rechnungsnr. 10978 / Auftragsnr. 3987" ; JSONString ] ;
-| "creditor.name" ; "Schreinerei Habegger & Söhne" ; JSONString ] ;
-| "creditor.street" ; "Uetlibergstrasse" ; JSONString ] ;
-| "creditor.houseNo" ; "138" ; JSONString ] ;
-| "creditor.postalCode" ; "8045" ; JSONString ] ;
-| "creditor.town" ; "Zürich" ; JSONString ] ;
-| "creditor.countryCode" ; "CH" ; JSONString ] ;
-| "debtor.name" ; "Simon Glarner" ; JSONString ] ;
-| "debtor.street" ; "Bächliwis" ; JSONString ] ;
-| "debtor.houseNo" ; "55" ; JSONString ] ;
-| "debtor.postalCode" ; "8184" ; JSONString ] ;
-| "creditor.town" ; "Bachenbülach" ; JSONString ] ;
-| "debtor.countryCode" ; "CH" ; JSONString ] ;
-| "format.graphics_format" ; "PDF" ; JSONString ] ;
-| "format.output_size" ; "QR_BILL_EXTRA_SPACE" ; JSONString ] ;
-| "format.language" ; "DE" ; JSONString ]
+[ "amount" ; 287.3 ; JSONNumber ] ;
+[ "currency" ; "CHF" ; JSONString ] ;
+[ "iban" ; "CH4431999123000889012" ; JSONString ] ;
+[ "reference" ; "000000000000000000000000000" ; JSONString] ;
+[ "message" ; "Rechnungsnr. 10978 / Auftragsnr. 3987" ; JSONString ] ;
+[ "creditor.name" ; "Schreinerei Habegger & Söhne" ; JSONString ] ;
+[ "creditor.street" ; "Uetlibergstrasse" ; JSONString ] ;
+[ "creditor.houseNo" ; "138" ; JSONString ] ;
+[ "creditor.postalCode" ; "8045" ; JSONString ] ;
+[ "creditor.town" ; "Zürich" ; JSONString ] ;
+[ "creditor.countryCode" ; "CH" ; JSONString ] ;
+[ "debtor.name" ; "Simon Glarner" ; JSONString ] ;
+[ "debtor.street" ; "Bächliwis" ; JSONString ] ;
+[ "debtor.houseNo" ; "55" ; JSONString ] ;
+[ "debtor.postalCode" ; "8184" ; JSONString ] ;
+[ "creditor.town" ; "Bachenbülach" ; JSONString ] ;
+[ "debtor.countryCode" ; "CH" ; JSONString ] ;
+[ "format.graphics_format" ; "PDF" ; JSONString ] ;
+[ "format.output_size" ; "QR_BILL_EXTRA_SPACE" ; JSONString ] ;
+[ "format.language" ; "DE" ; JSONString ]
 )
 ```
 
