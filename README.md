@@ -1431,3 +1431,12 @@ End If
 | name | description
 |---|---
 | `result` | Base64 encoded pdf stream 
+
+## History
+
+Version 1.2 QRBill Generator
+
+Version 1.3 QRCode Generator added
+
+Version 1.4 Barcode Generator added
+

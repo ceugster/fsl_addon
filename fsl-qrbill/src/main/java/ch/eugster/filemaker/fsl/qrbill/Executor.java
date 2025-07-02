@@ -74,7 +74,16 @@ public abstract class Executor
 	
 	protected static String getResponse()
 	{
-		String response = getResponseNode().put(Executor.STATUS, getResponseNode().has(Executor.ERRORS) ? Executor.ERROR : Executor.OK).toString();
+		if (getResponseNode().has(Executor.ERRORS))
+		{
+			getResponseNode().remove(Executor.RESULT);
+			getResponseNode().put(Executor.STATUS, Executor.ERROR);
+		}
+		else
+		{
+			getResponseNode().put(Executor.STATUS, Executor.OK);
+		}
+		String response = getResponseNode().toString();
 		requestNode = null;
 		responseNode = null;
 		return response;

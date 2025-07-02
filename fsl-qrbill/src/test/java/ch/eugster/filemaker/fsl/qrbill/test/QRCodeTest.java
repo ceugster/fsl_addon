@@ -126,12 +126,12 @@ public class QRCodeTest
 		JsonNode responseNode = mapper.readTree(response);
 		assertEquals(Executor.OK, responseNode.get(Executor.STATUS).asText());
 		byte[] result = responseNode.get(QRCode.Key.RESULT.key()).binaryValue();
-		Files.write(Paths.get("image_value.png"), result, StandardOpenOption.CREATE);
+		Files.write(Paths.get("image_simple.png"), result, StandardOpenOption.CREATE);
 		assertEquals("ADI3004000D054RECH00000006002959", responseNode.get(Key.VALUE.key()).asText());
 		MessageDigest md = MessageDigest.getInstance("MD5");
 	    md.update(result);
 	    byte[] digest1 = md.digest();
-	    byte[] content = Files.readAllBytes(Paths.get("image_value.png"));
+	    byte[] content = Files.readAllBytes(Paths.get("image_simple.png"));
 	    md.update(content);
 	    byte[] digest2 = md.digest();
 	    for (int i = 0; i < Math.max(digest1.length, digest2.length); i++)
@@ -158,7 +158,7 @@ public class QRCodeTest
 		JsonNode responseNode = mapper.readTree(response);
 		assertEquals(Executor.OK, responseNode.get(Executor.STATUS).asText());
 		byte[] result = responseNode.get(QRCode.Key.RESULT.key()).binaryValue();
-		Files.write(Paths.get("image_all.png"), result, StandardOpenOption.CREATE);
+		Files.write(Paths.get("qrcode_all_params.png"), result, StandardOpenOption.CREATE);
 		assertEquals("ADI3004000D054RECH00000006002959", responseNode.get(Key.VALUE.key()).asText());
 		MessageDigest md = MessageDigest.getInstance("MD5");
 	    md.update(result);
