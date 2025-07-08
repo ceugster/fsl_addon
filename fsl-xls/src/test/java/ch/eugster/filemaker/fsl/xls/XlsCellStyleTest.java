@@ -106,7 +106,7 @@ public final class XlsCellStyleTest extends AbstractXlsTest
 		assertEquals("illegal argument 'alignment.horizontal' (gigi)", responseNode.get(Executor.ERRORS).get(0).asText());
 
 		requestNode = mapper.createObjectNode();
-		requestNode.put(Key.PATH.key(), "src/test/results/testHorizontalAlignment");
+		requestNode.put(Key.PATH.key(), "results/testHorizontalAlignment");
 		
 		response = Xls.saveAndReleaseWorkbook(requestNode.toString());
 		
@@ -205,7 +205,7 @@ public final class XlsCellStyleTest extends AbstractXlsTest
 		assertEquals("illegal argument 'alignment.horizontal' (gigi)", responseNode.get(Executor.ERRORS).get(0).asText());
 
 		requestNode = mapper.createObjectNode();
-		requestNode.put(Key.PATH.key(), "src/test/results/testHorizontalAlignmentRange");
+		requestNode.put(Key.PATH.key(), "results/testHorizontalAlignmentRange");
 
 		response = Xls.saveAndReleaseWorkbook(requestNode.toString());
 		
@@ -293,7 +293,7 @@ public final class XlsCellStyleTest extends AbstractXlsTest
 		assertEquals("illegal argument 'alignment.vertical' (gigi)", responseNode.get(Executor.ERRORS).get(0).asText());
 
 		requestNode = mapper.createObjectNode();
-		requestNode.put(Key.PATH.key(), "src/test/results/testVerticalAlignment");
+		requestNode.put(Key.PATH.key(), "results/testVerticalAlignment");
 
 		response = Xls.saveAndReleaseWorkbook(requestNode.toString());
 		
@@ -392,7 +392,7 @@ public final class XlsCellStyleTest extends AbstractXlsTest
 		assertEquals("illegal argument 'alignment.vertical' (gigi)", responseNode.get(Executor.ERRORS).get(0).asText());
 
 		requestNode = mapper.createObjectNode();
-		requestNode.put(Key.PATH.key(), "src/test/results/testVerticalAlignmentRange");
+		requestNode.put(Key.PATH.key(), "results/testVerticalAlignmentRange");
 
 		response = Xls.saveAndReleaseWorkbook(requestNode.toString());
 		
@@ -484,7 +484,7 @@ public final class XlsCellStyleTest extends AbstractXlsTest
 		assertEquals("illegal argument 'border.style.top' (gigi)", responseNode.get(Executor.ERRORS).get(0).asText());
 
 		requestNode = mapper.createObjectNode();
-		requestNode.put(Key.PATH.key(), "src/test/results/testBorderStyles");
+		requestNode.put(Key.PATH.key(), "results/testBorderStyles");
 
 		response = Xls.saveAndReleaseWorkbook(requestNode.toString());
 		
@@ -576,7 +576,7 @@ public final class XlsCellStyleTest extends AbstractXlsTest
 		assertEquals("illegal argument 'border.style.top' (gigi)", responseNode.get(Executor.ERRORS).get(0).asText());
 
 		requestNode = mapper.createObjectNode();
-		requestNode.put(Key.PATH.key(), "src/test/results/testBorderStyleRange");
+		requestNode.put(Key.PATH.key(), "results/testBorderStyleRange");
 
 		response = Xls.saveAndReleaseWorkbook(requestNode.toString());
 		
@@ -588,7 +588,7 @@ public final class XlsCellStyleTest extends AbstractXlsTest
 	@Test
 	public void testDataFormatNumber() throws JsonMappingException, JsonProcessingException, InterruptedException, TimeoutException, ExecutionException
 	{
-		String path = "./src/test/results/dataFormatNumber.xlsx";
+		String path = "./results/dataFormatNumber.xlsx";
 		Xls.activeWorkbook = new XSSFWorkbook();
 		Sheet sheet = Xls.activeWorkbook.createSheet();
 		Row row = sheet.createRow(0);
@@ -686,7 +686,7 @@ public final class XlsCellStyleTest extends AbstractXlsTest
 	@Test
 	public void testDataFormatTime() throws JsonMappingException, JsonProcessingException, InterruptedException, TimeoutException, ExecutionException
 	{
-		String path = "./src/test/results/dataFormatTime.xlsx";
+		String path = "./results/dataFormatTime.xlsx";
 		Xls.activeWorkbook = new XSSFWorkbook();
 		Sheet sheet = Xls.activeWorkbook.createSheet();
 		Row row = sheet.createRow(0);
@@ -745,7 +745,7 @@ public final class XlsCellStyleTest extends AbstractXlsTest
 	@Test
 	public void testBackground() throws JsonMappingException, JsonProcessingException, InterruptedException, TimeoutException, ExecutionException
 	{
-		String path = "src/test/results/background.xlsx";
+		String path = "results/background.xlsx";
 		Xls.activeWorkbook = new XSSFWorkbook();
 		Sheet sheet = Xls.activeWorkbook.createSheet();
 		Row row = sheet.createRow(0);
@@ -779,7 +779,7 @@ public final class XlsCellStyleTest extends AbstractXlsTest
 	@Test
 	public void testAutoSizeColumns() throws JsonMappingException, JsonProcessingException, InterruptedException, TimeoutException, ExecutionException
 	{
-		String path = "src/test/results/autoSizeColumn.xlsx";
+		String path = "results/autoSizeColumn.xlsx";
 		Xls.activeWorkbook = new XSSFWorkbook();
 		Sheet sheet = Xls.activeWorkbook.createSheet();
 		Row row = sheet.createRow(0);
@@ -817,7 +817,7 @@ public final class XlsCellStyleTest extends AbstractXlsTest
 	@Test
 	public void testRotation() throws JsonMappingException, JsonProcessingException, InterruptedException, TimeoutException, ExecutionException
 	{
-		String path = "src/test/results/rotate.xlsx";
+		String path = "results/rotate.xlsx";
 		Xls.activeWorkbook = new XSSFWorkbook();
 		Sheet sheet = Xls.activeWorkbook.createSheet();
 		Row row = sheet.createRow(0);
@@ -844,7 +844,7 @@ public final class XlsCellStyleTest extends AbstractXlsTest
 	@Test
 	public void testRangeRotation() throws JsonMappingException, JsonProcessingException, InterruptedException, TimeoutException, ExecutionException
 	{
-		String path = "src/test/results/rotateRange.xlsx";
+		String path = "results/rotateRange.xlsx";
 		Xls.activeWorkbook = new XSSFWorkbook();
 		Sheet sheet = Xls.activeWorkbook.createSheet();
 		Row row = sheet.createRow(0);

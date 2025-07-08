@@ -43,6 +43,7 @@ public enum Key
 	TYPE("type"),
 	TYPE_OFFSET("type_offset"),
 	UNDERLINE("underline"),
+	VALUE("value"),
 	VALUES("values"),
 	VERTICAL("vertical"),
 	WORKBOOK("workbook"),

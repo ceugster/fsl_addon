@@ -36,7 +36,7 @@ public abstract class Executor
 			{
 				JsonNode _requestNode = mapper.readTree(request);
 				requestNode = ObjectNode.class.cast(_requestNode);
-				responseNode = mapper.createObjectNode();
+				responseNode = requestNode.deepCopy();
 			} 
 			catch (JsonMappingException e) 
 			{

@@ -78,7 +78,7 @@ public final class XlsFontTest extends AbstractXlsTest
 	@Test
 	public void testApplyNumericFontStylesToCell() throws EncryptedDocumentException, IOException, InterruptedException, TimeoutException, ExecutionException
 	{
-		File file = new File("src/test/results/applyFontStylesToCell.xlsx");
+		File file = new File("results/applyFontStylesToCell.xlsx");
 		FileUtils.copyFile(new File("src/test/resources/applyFontStylesToCell.xlsx"), file);
 		InputStream is = new FileInputStream(file);
 		Xls.activeWorkbook = WorkbookFactory.create(is);
@@ -155,7 +155,7 @@ public final class XlsFontTest extends AbstractXlsTest
 	@Test
 	public void testApplyFontStyleBold() throws EncryptedDocumentException, IOException, InterruptedException, TimeoutException, ExecutionException
 	{
-		File file = new File("src/test/results/applyFontStylesBold.xlsx");
+		File file = new File("results/applyFontStylesBold.xlsx");
 		FileUtils.copyFile(new File("src/test/resources/applyFontStylesBold.xlsx"), file);
 		InputStream is = new FileInputStream(file);
 		Xls.activeWorkbook = WorkbookFactory.create(is);
@@ -205,7 +205,7 @@ public final class XlsFontTest extends AbstractXlsTest
 	@Test
 	public void testApplyFontStyleBoldError() throws EncryptedDocumentException, IOException, InterruptedException, TimeoutException, ExecutionException
 	{
-		File file = new File("src/test/results/applyFontStyles.xlsx");
+		File file = new File("results/applyFontStyles.xlsx");
 		FileUtils.copyFile(new File("src/test/resources/applyFontStyles.xlsx"), file);
 		Xls.activeWorkbook = WorkbookFactory.create(file);
 
@@ -241,7 +241,7 @@ public final class XlsFontTest extends AbstractXlsTest
 	@Test
 	public void testApplyFontStyleItalic() throws EncryptedDocumentException, IOException, InterruptedException, TimeoutException, ExecutionException
 	{
-		File file = new File("src/test/results/applyFontStylesItalic.xlsx");
+		File file = new File("results/applyFontStylesItalic.xlsx");
 		FileUtils.copyFile(new File("src/test/resources/applyFontStylesItalic.xlsx"), file);
 		InputStream is = new FileInputStream(file);
 		Xls.activeWorkbook = WorkbookFactory.create(is);
@@ -289,7 +289,7 @@ public final class XlsFontTest extends AbstractXlsTest
 	@Test
 	public void testApplyFontStyleUnderline() throws EncryptedDocumentException, IOException, InterruptedException, TimeoutException, ExecutionException
 	{
-		File file = new File("src/test/results/applyFontStylesUnderline.xlsx");
+		File file = new File("results/applyFontStylesUnderline.xlsx");
 		FileUtils.copyFile(new File("src/test/resources/applyFontStylesUnderline.xlsx"), file);
 		InputStream is = new FileInputStream(file);
 		Xls.activeWorkbook = WorkbookFactory.create(is);
@@ -338,7 +338,7 @@ public final class XlsFontTest extends AbstractXlsTest
 	@Test
 	public void testApplyFontStyleColor() throws EncryptedDocumentException, IOException, InterruptedException, TimeoutException, ExecutionException
 	{
-		File file = new File("src/test/results/applyFontStylesColor.xlsx");
+		File file = new File("results/applyFontStylesColor.xlsx");
 		FileUtils.copyFile(new File("src/test/resources/applyFontStylesColor.xlsx"), file);
 		InputStream is = new FileInputStream(file);
 		Xls.activeWorkbook = WorkbookFactory.create(is);
@@ -386,7 +386,7 @@ public final class XlsFontTest extends AbstractXlsTest
 	@Test
 	public void testSetPrintSetup() throws JsonMappingException, JsonProcessingException, InterruptedException, TimeoutException, ExecutionException
 	{
-		File file = new File("src/test/results/SetPrintSetup.xlsx");
+		File file = new File("results/SetPrintSetup.xlsx");
 		Xls.activeWorkbook = new XSSFWorkbook();
 		Xls.activeWorkbook.createSheet();
 
@@ -414,7 +414,7 @@ public final class XlsFontTest extends AbstractXlsTest
 	@Test
 	public void testApplyFontStyleSize() throws EncryptedDocumentException, IOException, InterruptedException, TimeoutException, ExecutionException
 	{
-		File file = new File("src/test/results/applyFontStylesSize.xlsx");
+		File file = new File("results/applyFontStylesSize.xlsx");
 		FileUtils.copyFile(new File("src/test/resources/applyFontStylesSize.xlsx"), file);
 		InputStream is = new FileInputStream(file);
 		Xls.activeWorkbook = WorkbookFactory.create(is);
@@ -463,7 +463,7 @@ public final class XlsFontTest extends AbstractXlsTest
 	@Test
 	public void testApplyFontStyleName() throws EncryptedDocumentException, IOException, InterruptedException, TimeoutException, ExecutionException
 	{
-		File file = new File("src/test/results/applyFontStylesName.xlsx");
+		File file = new File("results/applyFontStylesName.xlsx");
 		FileUtils.copyFile(new File("src/test/resources/applyFontStylesName.xlsx"), file);
 		InputStream is = new FileInputStream(file);
 		Xls.activeWorkbook = WorkbookFactory.create(is);
@@ -511,7 +511,7 @@ public final class XlsFontTest extends AbstractXlsTest
 	@Test
 	public void testApplyFontStyleStrikeOut() throws EncryptedDocumentException, IOException, InterruptedException, TimeoutException, ExecutionException
 	{
-		File file = new File("src/test/results/applyFontStylesStrikeOut.xlsx");
+		File file = new File("results/applyFontStylesStrikeOut.xlsx");
 		FileUtils.copyFile(new File("src/test/resources/applyFontStylesStrikeOut.xlsx"), file);
 		InputStream is = new FileInputStream(file);
 		Xls.activeWorkbook = WorkbookFactory.create(is);
@@ -561,7 +561,7 @@ public final class XlsFontTest extends AbstractXlsTest
 	@Test
 	public void testApplyFontStyleTypeOffset() throws EncryptedDocumentException, IOException, InterruptedException, TimeoutException, ExecutionException
 	{
-		File file = new File("src/test/results/applyFontStylesTypeOffset.xlsx");
+		File file = new File("results/applyFontStylesTypeOffset.xlsx");
 		FileUtils.copyFile(new File("src/test/resources/applyFontStylesTypeOffset.xlsx"), file);
 		InputStream is = new FileInputStream(file);
 		Xls.activeWorkbook = WorkbookFactory.create(is);
@@ -610,7 +610,7 @@ public final class XlsFontTest extends AbstractXlsTest
 	@Test
 	public void testApplyFontStyleBoldToRange() throws EncryptedDocumentException, IOException, InterruptedException, TimeoutException, ExecutionException
 	{
-		File file = new File("src/test/results/applyFontStylesBoldToRange.xlsx");
+		File file = new File("results/applyFontStylesBoldToRange.xlsx");
 		FileUtils.copyFile(new File("src/test/resources/applyFontStylesBoldToRange.xlsx"), file);
 		InputStream is = new FileInputStream(file);
 		Xls.activeWorkbook = WorkbookFactory.create(is);
@@ -653,7 +653,7 @@ public final class XlsFontTest extends AbstractXlsTest
 	@Test
 	public void testApplyFontStyleItalicToRange() throws EncryptedDocumentException, IOException, InterruptedException, TimeoutException, ExecutionException
 	{
-		File file = new File("src/test/results/applyFontStylesItalicToRange.xlsx");
+		File file = new File("results/applyFontStylesItalicToRange.xlsx");
 		FileUtils.copyFile(new File("src/test/resources/applyFontStylesItalicToRange.xlsx"), file);
 		InputStream is = new FileInputStream(file);
 		Xls.activeWorkbook = WorkbookFactory.create(is);
@@ -788,7 +788,7 @@ public final class XlsFontTest extends AbstractXlsTest
 		System.out.println(sheet.getRow(0).getCell(0).getCellStyle().getFontIndex());
 		System.out.println(sheet.getRow(1).getCell(0).getCellStyle().getFontIndex());
 		
-		File file = new File("src/test/results/testfonts.xlsx");
+		File file = new File("results/testfonts.xlsx");
 		requestNode = mapper.createObjectNode();
 		requestNode.put(Key.PATH.key(), file.getAbsolutePath());
 

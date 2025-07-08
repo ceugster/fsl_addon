@@ -40,8 +40,12 @@ public class Barcode extends Executor
 			{
 				setContent(barcode);
 				setFont(barcode);
+				setFontSizeAdjusted(barcode);
 				setText(barcode);
-
+				setTextVisible(barcode);
+				setTextTop(barcode);
+				setTextOffset(barcode);
+				
 				ImageCreator imageCreator = new ImageCreator(getWidth(), getHeight());
 				setTitle(imageCreator);
 				setForegroundColor(imageCreator);
@@ -112,29 +116,19 @@ public class Barcode extends Executor
 					barcode.setFont(font);
 				}
 			}
-			else
-			{
-			    try
-			    {
-			    	GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			    	ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, Barcode.class.getResourceAsStream("../fonts/OCR-B.ttf")));
-					barcode.setFont(font);
-			    }
-			    catch (Exception e)
-			    {
-					addErrorMessage(e.getLocalizedMessage());
-			    }
-			}
-
-			node = getRequestNode().get(Key.FONT_SIZE_ADJUSTED.key());
-			if (node != null && node.isBoolean())
-			{
-				barcode.setFontSizeAdjusted(node.asBoolean());
-			}
-			else
-			{
-				barcode.setFontSizeAdjusted(true);
-			}
+//			else
+//			{
+//			    try
+//			    {
+//			    	GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+//			    	ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, Barcode.class.getResourceAsStream("../fonts/OCR-B.ttf")));
+//					barcode.setFont(font);
+//			    }
+//			    catch (Exception e)
+//			    {
+//					addErrorMessage(e.getLocalizedMessage());
+//			    }
+//			}
 		}
 		catch (Exception e)
 		{
@@ -142,6 +136,19 @@ public class Barcode extends Executor
 		}
 	}
 
+	private static void setFontSizeAdjusted(de.vwsoft.barcodelib4j.oned.Barcode barcode)
+	{
+		JsonNode node = getRequestNode().get(Key.FONT_SIZE_ADJUSTED.key());
+		if (node != null && node.isBoolean())
+		{
+			barcode.setFontSizeAdjusted(node.asBoolean());
+		}
+		else
+		{
+			barcode.setFontSizeAdjusted(true);
+		}
+	}
+	
 	private static void setText(de.vwsoft.barcodelib4j.oned.Barcode barcode)
 	{
 		JsonNode node = getRequestNode().get(Key.TEXT.key());
@@ -163,6 +170,33 @@ public class Barcode extends Executor
 			{
 				barcode.setTextOffset(node.asDouble());
 			}
+		}
+	}
+
+	private static void setTextVisible(de.vwsoft.barcodelib4j.oned.Barcode barcode)
+	{
+		JsonNode node = getRequestNode().get(Key.TEXT_VISIBLE.key());
+		if (node != null && node.isBoolean())
+		{
+			barcode.setTextVisible(node.asBoolean());
+		}
+	}
+
+	private static void setTextTop(de.vwsoft.barcodelib4j.oned.Barcode barcode)
+	{
+		JsonNode node = getRequestNode().get(Key.TEXT_TOP.key());
+		if (node != null && node.isBoolean())
+		{
+			barcode.setTextOnTop(node.asBoolean());
+		}
+	}
+
+	private static void setTextOffset(de.vwsoft.barcodelib4j.oned.Barcode barcode)
+	{
+		JsonNode node = getRequestNode().get(Key.TEXT_OFFSET.key());
+		if (node != null && node.isDouble())
+		{
+			barcode.setTextOffset(node.asDouble());
 		}
 	}
 

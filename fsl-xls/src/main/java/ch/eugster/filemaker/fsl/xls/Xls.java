@@ -2,6 +2,7 @@ package ch.eugster.filemaker.fsl.xls;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -48,12 +49,15 @@ import org.apache.poi.xssf.usermodel.XSSFEvaluationWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.IntNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
+import com.fasterxml.jackson.databind.node.ValueNode;
 
 /**
  * @author christian
@@ -72,6 +76,8 @@ import com.fasterxml.jackson.databind.node.TextNode;
 public class Xls extends Executor
 {
 	public static Workbook activeWorkbook;
+
+	private static Logger log = LoggerFactory.getLogger(Xls.class);
 
 	/**
 	 * Set active sheet
@@ -240,6 +246,32 @@ public class Xls extends Executor
 		return getResponse();
 	}
 	
+//	/**
+//	 * Create and save a workbook with initial sheet
+//	 * 
+//	 * @param sheet name (optional)
+//	 * @param path
+//	 * 
+//	 * @return status 'OK' or 'Fehler'
+//	 * @return optional 'errors' array of error messages
+//	 * 
+//	 */
+//	public static String createAndSaveWorkbookWithSheet(String request)
+//	{
+//		if (createRequestNode(request))
+//		{
+//			if (doCreateWorkbook())
+//			{
+//				if (doCreateSheet())
+//				{
+//					doSaveWorkbook();
+//					doReleaseWorkbook();
+//				}
+//			}
+//		}
+//		return getResponse();
+//	}
+//	
 	/**
 	 * Drop sheet
 	 * 
@@ -422,6 +454,18 @@ public class Xls extends Executor
 		return getResponse();
 	}
 
+	public static String setCell(String request)
+	{
+		if (createRequestNode(request))
+		{
+			if (workbookPresent())
+			{
+				doSetCell();
+			}
+		}
+		return getResponse();
+	}
+	
 	public static String setCells(String request)
 	{
 		if (createRequestNode(request))
@@ -489,11 +533,11 @@ public class Xls extends Executor
 		return getResponse();
 	}
 	
-	public static String workbookPresent(String request)
+	public static String activeWorkbookPresent(String request)
 	{
 		if (createRequestNode(request))
 		{
-			getResponseNode().put(Executor.RESULT, Objects.nonNull(Xls.activeWorkbook) ? 1 : 0);
+			getResponseNode().put(Executor.RESULT, Boolean.valueOf(Objects.nonNull(Xls.activeWorkbook)).toString());
 		}
 		return getResponse();
 	}
@@ -637,14 +681,17 @@ public class Xls extends Executor
 		{
 			Sheet sheet = activeWorkbook.getSheetAt(activeWorkbook.getActiveSheetIndex());
 			result = Objects.nonNull(sheet);
-			getResponseNode().put(Key.INDEX.key(), result ? 1 : 0);
-			getResponseNode().put(Key.SHEET.key(), result ? sheet.getSheetName() : "");
+			getResponseNode().put(Executor.RESULT, Boolean.valueOf(result).toString());
+			if (result)
+			{
+				getResponseNode().put(Key.INDEX.key(), activeWorkbook.getActiveSheetIndex());
+				getResponseNode().put(Key.SHEET.key(), sheet.getSheetName());
+			}
 		}
 		catch (IllegalArgumentException e)
 		{
 			result = false;
-			getResponseNode().put(Key.INDEX.key(), 0);
-			getResponseNode().put(Key.SHEET.key(), "");
+			getResponseNode().put(Executor.RESULT, Boolean.valueOf(result).toString());
 		}
 		return result;
 	}
@@ -958,18 +1005,20 @@ public class Xls extends Executor
 	
 	private static boolean doCreateSheet()
 	{
-		boolean result = true;
+		boolean result = false;
 		Sheet sheet = null;
 		JsonNode sheetNode = getRequestNode().findPath(Key.SHEET.key());
 		if (sheetNode.isMissingNode())
 		{
 			sheet = activeWorkbook.createSheet();
+			result = true;
 		}
 		else if (sheetNode.isTextual())
 		{
 			try
 			{
 				sheet = activeWorkbook.createSheet(sheetNode.asText());
+				result = true;
 			}
 			catch (IllegalArgumentException e)
 			{
@@ -1004,16 +1053,18 @@ public class Xls extends Executor
 				case XLSX:
 				{
 					activeWorkbook = new XSSFWorkbook();
+					break;
 				}
 				case XLS:
 				{
 					activeWorkbook = new HSSFWorkbook();
+					break;
 				}
 			}
 		}
 		else
 		{
-			result = addErrorMessage("illegal extension '" + typeNode.asText() + "'");
+			result = addErrorMessage("Illegal workbook type '" + typeNode.asText() + "'.");
 		}
 		return result;
 	}
@@ -1147,8 +1198,17 @@ public class Xls extends Executor
 
 	private static boolean doReleaseWorkbook()
 	{
-		activeWorkbook = null;
-		return true;
+		try 
+		{
+			activeWorkbook.close();
+			activeWorkbook = null;
+			return true;
+		}
+		catch (IOException e)
+		{
+			addErrorMessage("Cannot not close workbook.");
+			return false;
+		}
 	}
 	
 	private static boolean doRenameSheet()
@@ -1247,42 +1307,15 @@ public class Xls extends Executor
 		JsonNode pathNode = getRequestNode().findPath(Key.PATH.key());
 		if (pathNode.isTextual())
 		{
-			File file = new File(pathNode.asText());
-			OutputStream os = null;
-			try
+			String pathname = replaceExtension();
+			try (OutputStream os = new FileOutputStream(new File(pathname)))
 			{
-				file.getCanonicalPath();
-				if (!file.getName().endsWith(".xlsx") && !file.getName().endsWith(".xls"))
-				{
-					if (XSSFWorkbook.class.isInstance(activeWorkbook))
-					{
-						file = new File(file.getAbsolutePath() + ".xlsx");
-					}
-					else if (HSSFWorkbook.class.isInstance(activeWorkbook))
-					{
-						file = new File(file.getAbsolutePath() + ".xls");
-					}
-				}
-				os = new FileOutputStream(file);
 				activeWorkbook.write(os);
+				os.close();
 			}
 			catch (Exception e)
 			{
 				result = addErrorMessage("saving workbook failed (" + e.getLocalizedMessage() + ")");
-			}
-			finally
-			{
-				if (Objects.nonNull(os))
-				{
-					try
-					{
-						os.flush();
-						os.close();
-					}
-					catch (Exception e)
-					{
-					}
-				}
 			}
 		}
 		else if (pathNode.isMissingNode())
@@ -1296,13 +1329,58 @@ public class Xls extends Executor
 		return result;
 	}
 
+	private static String replaceExtension()
+	{
+		String pathname = getRequestNode().get(Key.PATH.key()).asText();
+		if (XSSFWorkbook.class.isInstance(activeWorkbook))
+		{
+			if (!pathname.endsWith(".xlsx"))
+			{
+				if (pathname.endsWith(".xls"))
+				{
+					pathname = pathname.substring(0, pathname.lastIndexOf(".xls") - 1) + ".xlsx";
+				}
+				else
+				{
+					pathname = pathname + ".xlsx";
+				}
+			}
+		}
+		if (HSSFWorkbook.class.isInstance(activeWorkbook))
+		{
+			if (!pathname.endsWith(".xls"))
+			{
+				if (pathname.endsWith(".xlsx"))
+				{
+					pathname = pathname.substring(0, pathname.lastIndexOf(".xlsx") - 1) + ".xls";
+				}
+				else
+				{
+					pathname = pathname + ".xls";
+				}
+			}
+		}
+		return pathname;
+	}
+	
 	private static boolean doSetCell(Sheet sheet, CellAddress cellAddress, JsonNode valueNode)
 	{
 		boolean result = true;
 		Cell cell = getOrCreateCell(sheet, cellAddress);
 		if (valueNode.isNumber())
 		{
-			cell.setCellValue(valueNode.asDouble());
+			if (valueNode.isInt())
+			{
+				cell.setCellValue(valueNode.asInt());
+			}
+			else if (valueNode.isLong())
+			{
+				cell.setCellValue(valueNode.asLong());
+			}
+			else if (valueNode.isDouble())
+			{
+				cell.setCellValue(valueNode.asDouble());
+			}
 		}
 		else if (valueNode.isTextual())
 		{
@@ -1366,8 +1444,53 @@ public class Xls extends Executor
 		}
 		else
 		{
-			// TODO Other types?
-			System.out.println();
+			addErrorMessage("Der Wertetyp '" + valueNode.asText() + "' wird nicht unterstützt.");
+		}
+		return result;
+	}
+
+	private static boolean doSetCell()
+	{
+		boolean result = true;
+		Sheet sheet = getSheet(getRequestNode());
+		result = Objects.nonNull(sheet);
+		if (result)
+		{
+			JsonNode cellNode = getRequestNode().findPath(Key.CELL.key());
+			JsonNode valueNode = getRequestNode().findPath(Key.VALUE.key());
+			if (cellNode.isMissingNode())
+			{
+				result = addErrorMessage("Missing argument '" + Key.CELL.key() + "'");
+			}
+			else if (valueNode.isMissingNode())
+			{
+				result = addErrorMessage("Missing argument '" + Key.VALUE.key() + "'");
+			}
+			else if (valueNode.isArray())
+			{
+				result = addErrorMessage("Argument '" + Key.VALUE.key() + "' must have a single value.");
+			}
+			else if (valueNode.isValueNode())
+			{
+				ValueNode value = ValueNode.class.cast(valueNode);
+				if (cellNode.isValueNode())
+				{
+					CellAddress cellAddress = getCellAddress(cellNode);
+					result = doSetCell(sheet, cellAddress, value);
+				}
+				else
+				{
+					result = addErrorMessage("Invalid argument '" + Key.CELL.key() + "'");
+				}
+			}
+			else
+			{
+				result = addErrorMessage("Invalid argument '" + Key.VALUE.key() + "'");
+			}
+		}
+		else
+		{
+			result = addErrorMessage("Missing argument '" + Key.SHEET.key() + "'");
 		}
 		return result;
 	}
@@ -1388,6 +1511,10 @@ public class Xls extends Executor
 			else if (valuesNode.isMissingNode())
 			{
 				result = addErrorMessage("missing argument '" + Key.VALUES.key() + "'");
+			}
+			else if (valuesNode.isObject())
+			{
+				result = addErrorMessage("Argument '" + Key.VALUES.key() + "' must be an array of values.");
 			}
 			else if (valuesNode.isArray())
 			{
@@ -1598,15 +1725,18 @@ public class Xls extends Executor
 					case LANDSCAPE:
 					{
 						sheet.getPrintSetup().setLandscape(true);
+						break;
 					}
 					case PORTRAIT:
 					{
 						sheet.getPrintSetup().setNoOrientation(false);
 						sheet.getPrintSetup().setLandscape(false);
+						break;
 					}
 					default:
 					{
 						sheet.getPrintSetup().setNoOrientation(true);
+						break;
 					}
 				}
 			}
@@ -1972,6 +2102,7 @@ public class Xls extends Executor
 		try
 		{
 			sheet = activeWorkbook.getSheetAt(activeWorkbook.getActiveSheetIndex());
+			
 			JsonNode sheetNode = getRequestNode().findPath(Key.SHEET.key());
 			if (sheetNode.isMissingNode())
 			{
@@ -1981,7 +2112,15 @@ public class Xls extends Executor
 					sheet = activeWorkbook.getSheetAt(indexNode.asInt());
 					if (Objects.isNull(sheet))
 					{
-						addErrorMessage("sheet index with (" + indexNode.asInt() + ") does not exist");
+						addErrorMessage("sheet with index '" + indexNode.asInt() + "' does not exist");
+					}
+				}
+				else if (indexNode.isTextual())
+				{
+					sheet = activeWorkbook.getSheet(indexNode.asText());
+					if (Objects.isNull(sheet))
+					{
+						addErrorMessage("sheet with index '" + indexNode.asText() + "' does not exist");
 					}
 				}
 				else if (!indexNode.isMissingNode())
@@ -1995,6 +2134,14 @@ public class Xls extends Executor
 				if (Objects.isNull(sheet))
 				{
 					addErrorMessage("sheet with name '" + sheetNode.asText() + "' does not exist");
+				}
+			}
+			else if (sheetNode.isInt())
+			{
+				sheet = activeWorkbook.getSheetAt(sheetNode.asInt());
+				if (Objects.isNull(sheet))
+				{
+					addErrorMessage("sheet with index '" + sheetNode.asInt() + "' does not exist");
 				}
 			}
 			else

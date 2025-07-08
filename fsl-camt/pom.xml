@@ -15,4 +15,22 @@
 	<description>CAMT Converter converts CAMT XLM files to CAMT JSON and vice
 		versa</description>
 
+
+	<properties>
+		<poi.version>5.4.1</poi.version>
+	</properties>
+	
+	<dependencies>
+		<dependency>
+			<groupId>com.prowidesoftware</groupId>
+			<artifactId>pw-iso20022</artifactId>
+			<version>SRU2022-10.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.prowidesoftware</groupId>
+			<artifactId>pw-swift-core</artifactId>
+			<version>SRU2022-10.0.0</version>
+		</dependency>
+	</dependencies>
+
 </project>

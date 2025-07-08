@@ -63,7 +63,6 @@ public final class XlsCellTest extends AbstractXlsTest
 		valuesNode.add(4);
 		valuesNode.add("SUM(C2:F2)");
 		requestNode.set("values", valuesNode);
-		requestNode.put("path", "./src/test/results/test.xlsx");
 
 		String response = Xls.setCells(requestNode.toString());
 		
@@ -94,7 +93,6 @@ public final class XlsCellTest extends AbstractXlsTest
 		valuesNode.add(4);
 		valuesNode.add("SUM(C2:F2)");
 		requestNode.set("values", valuesNode);
-		requestNode.put("path", "./src/test/results/test.xlsx");
 
 		String response = Xls.setCells(requestNode.toString());
 		
@@ -120,6 +118,41 @@ public final class XlsCellTest extends AbstractXlsTest
 			}
 		}
 	}
+	
+	@Test
+	public void testSetCell() throws JsonMappingException, JsonProcessingException
+	{
+		Xls.activeWorkbook = new XSSFWorkbook();
+		Sheet sheet = Xls.activeWorkbook.createSheet();
+		
+		ObjectNode requestNode = mapper.createObjectNode();
+		requestNode.put(Key.SHEET.key(), sheet.getSheetName());
+		requestNode.put(Key.CELL.key(), "A1");
+		requestNode.put(Key.VALUE.key(), 1.0);
+
+		String response = Xls.setCell(requestNode.toString());
+		
+		JsonNode responseNode = mapper.readTree(response);
+		assertEquals("A1", responseNode.get(Key.CELL.key()).asText());
+		
+
+//		requestNode = mapper.createObjectNode();
+//		ObjectNode cellNode = requestNode.objectNode();
+//		cellNode.put("row", 1);
+//		cellNode.put("col", 1);
+//		requestNode.set(Key.CELL.key(), cellNode);
+//
+//		ObjectNode valueNode = requestNode.objectNode();
+//		valueNode.put(Key.VALUE.key(), 1);
+//		requestNode.set(Key.VALUE.key(), valueNode);
+//
+//		response = Xls.setCell(requestNode.toString());
+//		
+//		responseNode = mapper.readTree(response);
+//		assertEquals(Executor.OK, responseNode.get(Executor.STATUS).asText());
+//		assertEquals(1, sheet.getRow(1).getCell(1).getNumericCellValue());
+//		assertNull(responseNode.get(Executor.ERRORS));
+	}
 
 	@Test
 	public void testSetCellsRightByIntegers() throws JsonMappingException, JsonProcessingException, InterruptedException, TimeoutException, ExecutionException
@@ -143,7 +176,6 @@ public final class XlsCellTest extends AbstractXlsTest
 		valuesNode.add(4);
 		valuesNode.add("SUM(C2:F2)");
 		requestNode.set("values", valuesNode);
-		requestNode.put("path", "./src/test/results/test.xlsx");
 
 		String response = Xls.setCells(requestNode.toString());
 		
@@ -174,7 +206,6 @@ public final class XlsCellTest extends AbstractXlsTest
 		valuesNode.add(4);
 		valuesNode.add("SUM(C2:F2)");
 		requestNode.set("values", valuesNode);
-		requestNode.put("path", "./src/test/results/test.xlsx");
 
 		String response = Xls.setCells(requestNode.toString());
 		
@@ -198,7 +229,6 @@ public final class XlsCellTest extends AbstractXlsTest
 		ArrayNode valuesNode = requestNode.arrayNode();
 		valuesNode.add("Title");
 		requestNode.set("values", valuesNode);
-		requestNode.put("path", "./src/test/results/CellsRightOneCell.xlsx");
 
 		String response = Xls.setCells(requestNode.toString());
 		
@@ -229,7 +259,6 @@ public final class XlsCellTest extends AbstractXlsTest
 		valuesNode.add(4);
 		valuesNode.add("SUM(C3:F3)");
 		requestNode.set("values", valuesNode);
-		requestNode.put("path", "./src/test/results/test.xlsx");
 
 		String response = Xls.setCells(requestNode.toString());
 		
@@ -260,7 +289,6 @@ public final class XlsCellTest extends AbstractXlsTest
 		valuesNode.add(4);
 		valuesNode.add("SUM(I26:I29)");
 		requestNode.set("values", valuesNode);
-		requestNode.put("path", "./src/test/results/test.xlsx");
 
 		String response = Xls.setCells(requestNode.toString());
 		
@@ -291,7 +319,6 @@ public final class XlsCellTest extends AbstractXlsTest
 		valuesNode.add(4);
 		valuesNode.add("SUM(K4:K7)");
 		requestNode.set("values", valuesNode);
-		requestNode.put("path", "./src/test/results/test.xlsx");
 
 		String response = Xls.setCells(requestNode.toString());
 		
@@ -324,7 +351,6 @@ public final class XlsCellTest extends AbstractXlsTest
 		valuesNode.add(4);
 		valuesNode.add("SUM(K4:K7)");
 		requestNode.set("values", valuesNode);
-		requestNode.put("path", "./src/test/results/test.xlsx");
 
 		String response = Xls.setCells(requestNode.toString());
 		
@@ -499,7 +525,7 @@ public final class XlsCellTest extends AbstractXlsTest
 	@Test
 	public void testCopySingleFormulaCellToSingleCell() throws IOException, InterruptedException, TimeoutException, ExecutionException
 	{
-		String workbook = "./src/test/results/CopySingleFormulaCell.xlsx";
+		String workbook = "./results/CopySingleFormulaCell.xlsx";
 		Xls.activeWorkbook = new XSSFWorkbook();
 		Sheet sheet = Xls.activeWorkbook.createSheet();
 		Row row0 = sheet.createRow(0);
@@ -544,7 +570,7 @@ public final class XlsCellTest extends AbstractXlsTest
 	@Test
 	public void testCopySingleFormulaCellToMultipleCells() throws IOException, InterruptedException, TimeoutException, ExecutionException
 	{
-		String path = "src/test/results/CopySingleCellMultipleCells.xlsx";
+		String path = "./results/CopySingleCellMultipleCells.xlsx";
 		Xls.activeWorkbook = new XSSFWorkbook();
 		Sheet sheet = Xls.activeWorkbook.createSheet();
 		Row row0 = sheet.createRow(0);
@@ -595,7 +621,7 @@ public final class XlsCellTest extends AbstractXlsTest
 	@Test
 	public void testCopySingleFormulaCellToMultipleCellsWithAddresses() throws IOException, InterruptedException, TimeoutException, ExecutionException
 	{
-		String path = "./src/test/results/testCopySingleFormulaCellToMultipleCellsWithAddresses.xlsx";
+		String path = "./results/testCopySingleFormulaCellToMultipleCellsWithAddresses.xlsx";
 		Xls.activeWorkbook = new XSSFWorkbook();
 		Sheet sheet = Xls.activeWorkbook.createSheet();
 		Row row0 = sheet.createRow(0);
@@ -650,7 +676,7 @@ public final class XlsCellTest extends AbstractXlsTest
 	@Test
 	public void testCopySingleFormulaCellToMultipleCellsWithInts() throws IOException, InterruptedException, TimeoutException, ExecutionException
 	{
-		String path = "./src/test/results/testCopySingleFormulaCellToMultipleCellsWithInts.xlsx";
+		String path = "./results/testCopySingleFormulaCellToMultipleCellsWithInts.xlsx";
 		Xls.activeWorkbook = new XSSFWorkbook();
 		Sheet sheet = Xls.activeWorkbook.createSheet();
 		Row row0 = sheet.createRow(0);

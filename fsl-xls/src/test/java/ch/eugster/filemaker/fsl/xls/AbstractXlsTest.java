@@ -1,5 +1,6 @@
 package ch.eugster.filemaker.fsl.xls;
 
+import java.io.File;
 import java.util.Objects;
 
 import org.junit.jupiter.api.AfterEach;
@@ -11,15 +12,18 @@ public abstract class AbstractXlsTest
 {
 	protected ObjectMapper mapper = new ObjectMapper();
 	
-	protected final String WORKBOOK_1 = "./src/test/results/workbook1.xlsx";
+	protected final String WORKBOOK_1 = "./results/workbook1.xlsx";
 	
-	protected final String SHEET0 = "Sheet0";
-
 	protected Xls xls;
 	
 	@BeforeEach
 	protected void beforeEach() throws Exception
 	{
+		File results = new File("results");
+		if (!results.exists())
+		{
+			results.mkdirs();
+		}
 		if (Objects.isNull(xls))
 		{
 			xls = new Xls();

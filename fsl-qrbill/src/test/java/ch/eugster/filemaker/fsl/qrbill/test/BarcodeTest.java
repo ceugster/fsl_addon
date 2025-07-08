@@ -110,7 +110,8 @@ public class BarcodeTest
 		}
 		String response = Barcode.generate(requestNode.toString());
 		JsonNode responseNode = mapper.readTree(response);
-		Files.write(Paths.get("Isbn13_min.png"), responseNode.get(Executor.RESULT).binaryValue(), StandardOpenOption.CREATE);
+		assertEquals("OK", responseNode.get(Executor.STATUS).asText());
+		Files.write(Paths.get("Code39_min.png"), responseNode.get(Executor.RESULT).binaryValue(), StandardOpenOption.CREATE);
 		System.out.println(response);
 	}
 
@@ -225,7 +226,40 @@ public class BarcodeTest
 		}
 		String response = Barcode.generate(requestNode.toString());
 		JsonNode responseNode = mapper.readTree(response);
+		assertEquals("OK", responseNode.get(Executor.STATUS).asText());
 		Files.write(Paths.get("Isbn13_full.png"), responseNode.get(Executor.RESULT).binaryValue(), StandardOpenOption.CREATE);
+		System.out.println(response);
+	}
+
+	@Test
+	public void testMinimalCode39() throws IOException, BarcodeException
+	{
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode requestNode = mapper.createObjectNode();
+		for (Key key : Barcode.Key.values())
+		{
+			switch (key)
+			{
+			case BARCODE_TYPE:
+			{
+				requestNode.put(key.key(), BarcodeType.CODE39.name());
+				break;
+			}
+			case CONTENT:
+			{
+				requestNode.put(key.key(), "9783423204194");
+				break;
+			}
+			default:
+			{
+				
+			}
+			}
+		}
+		String response = Barcode.generate(requestNode.toString());
+		JsonNode responseNode = mapper.readTree(response);
+		assertEquals("OK", responseNode.get(Executor.STATUS).asText());
+		Files.write(Paths.get("Isbn13_min.png"), responseNode.get(Executor.RESULT).binaryValue(), StandardOpenOption.CREATE);
 		System.out.println(response);
 	}
 
