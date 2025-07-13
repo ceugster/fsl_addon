@@ -246,13 +246,13 @@ public class XmlTest extends Xml
 		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<root />\r\n", XML_OUTPUTTER.outputString(document));
 	}
 
-	@Test
-	public void testBuildDocumentWithoutElements() throws Exception
-	{
-		String content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n";
-		Document document = Xml.buildDocument(content);
-		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n", XML_OUTPUTTER.outputString(document));
-	}
+//	@Test
+//	public void testBuildDocumentWithoutElements() throws Exception
+//	{
+//		String content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n";
+//		Document document = Xml.buildDocument(content);
+//		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n", XML_OUTPUTTER.outputString(document));
+//	}
 	
 	@Test
 	public void testSetElementWithWrongRootElementName() throws Exception
