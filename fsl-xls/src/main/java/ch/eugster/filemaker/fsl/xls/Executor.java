@@ -40,20 +40,20 @@ public abstract class Executor
 			} 
 			catch (JsonMappingException e) 
 			{
-				result = addErrorMessage("cannot map 'request': illegal json format");
+				result = addErrorMessage("Cannot map 'request': illegal json format");
 			} 
 			catch (JsonProcessingException e) 
 			{
-				result = addErrorMessage("cannot process 'request': illegal json format");
+				result = addErrorMessage("Cannot process 'request': illegal json format");
 			}
 			catch (ClassCastException e)
 			{
-				result = addErrorMessage("cannot cast 'request': illegal json format");
+				result = addErrorMessage("Cannot cast 'request': illegal json format");
 			}
 		}
 		else
 		{
-			result = addErrorMessage("missing argument 'request'");
+			result = addErrorMessage("Missing argument 'request'");
 		}
 		return result;
 	}

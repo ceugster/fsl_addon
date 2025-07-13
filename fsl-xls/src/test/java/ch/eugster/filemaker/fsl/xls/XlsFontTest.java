@@ -18,7 +18,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.PrintOrientation;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
@@ -50,7 +49,7 @@ public final class XlsFontTest extends AbstractXlsTest
 		
 		JsonNode responseNode = mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
-		assertEquals("workbook missing (create workbook first)", responseNode.get(Executor.ERRORS).get(0).asText());
+		assertEquals("Workbook missing (create workbook first)", responseNode.get(Executor.ERRORS).get(0).asText());
 	}
 	
 	@Test
@@ -72,7 +71,7 @@ public final class XlsFontTest extends AbstractXlsTest
 		
 		JsonNode responseNode = mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
-		assertEquals("sheet index (0) is out of range (no sheets)", responseNode.get(Executor.ERRORS).get(0).asText());
+		assertEquals("Sheet index (0) is out of range (no sheets)", responseNode.get(Executor.ERRORS).get(0).asText());
 	}
 	
 	@Test
@@ -375,34 +374,6 @@ public final class XlsFontTest extends AbstractXlsTest
 		requestNode = mapper.createObjectNode();
 		requestNode.put(Key.PATH.key(), file.getAbsolutePath());
 		
-		response = Xls.saveWorkbook(requestNode.toString());
-		
-		responseNode = mapper.readTree(response);
-		assertEquals(Executor.OK, responseNode.get(Executor.STATUS).asText());
-		assertNull(responseNode.get(Executor.ERRORS));
-		assertTrue(file.isFile());
-	}
-	
-	@Test
-	public void testSetPrintSetup() throws JsonMappingException, JsonProcessingException, InterruptedException, TimeoutException, ExecutionException
-	{
-		File file = new File("results/SetPrintSetup.xlsx");
-		Xls.activeWorkbook = new XSSFWorkbook();
-		Xls.activeWorkbook.createSheet();
-
-		ObjectNode requestNode = mapper.createObjectNode();
-		requestNode.put(Key.ORIENTATION.key(), PrintOrientation.LANDSCAPE.name().toLowerCase());
-		requestNode.put(Key.COPIES.key(), 2);
-		
-		String response = Xls.setPrintSetup(requestNode.toString());
-		
-		JsonNode responseNode = mapper.readTree(response);
-		assertEquals(Executor.OK, responseNode.get(Executor.STATUS).asText());
-		assertNull(responseNode.get(Executor.ERRORS));
-
-		requestNode = mapper.createObjectNode();
-		requestNode.put(Key.PATH.key(), file.getAbsolutePath());
-
 		response = Xls.saveWorkbook(requestNode.toString());
 		
 		responseNode = mapper.readTree(response);

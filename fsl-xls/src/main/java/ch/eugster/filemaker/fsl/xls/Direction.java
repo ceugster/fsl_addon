@@ -49,7 +49,7 @@ enum Direction implements MessageProvider
 				boolean valid = cellAddress.getColumn() - numberOfCells + 1 < 0 ? false : true;
 				if (!valid)
 				{
-					addErrorMessage(responseNode, "minimal_horizontal_cell_position exceeds sheet's extent negatively");
+					addErrorMessage(responseNode, "Minimal_horizontal_cell_position exceeds sheet's extent negatively");
 				}
 				return valid;
 			}
@@ -59,7 +59,7 @@ enum Direction implements MessageProvider
 						.getSpreadsheetVersion().getLastColumnIndex() ? false : true;
 				if (!valid)
 				{
-					addErrorMessage(responseNode, "maximal_horizontal_cell_position exceeds sheet's extent positively");
+					addErrorMessage(responseNode, "Maximal_horizontal_cell_position exceeds sheet's extent positively");
 				}
 				return valid;
 			}
@@ -68,7 +68,7 @@ enum Direction implements MessageProvider
 				boolean valid = cellAddress.getRow() - numberOfCells + 1 < 0 ? false : true;
 				if (!valid)
 				{
-					addErrorMessage(responseNode, "minimal_vertical_cell_position exceeds sheet's extent negatively");
+					addErrorMessage(responseNode, "Minimal_vertical_cell_position exceeds sheet's extent negatively");
 				}
 				return valid;
 			}
@@ -78,7 +78,7 @@ enum Direction implements MessageProvider
 						.getSpreadsheetVersion().getLastRowIndex() ? false : true;
 				if (!valid)
 				{
-					addErrorMessage(responseNode, "maximal_vertical_cell_position exceeds sheet's extent positively");
+					addErrorMessage(responseNode, "Maximal_vertical_cell_position exceeds sheet's extent positively");
 				}
 				return valid;
 			}

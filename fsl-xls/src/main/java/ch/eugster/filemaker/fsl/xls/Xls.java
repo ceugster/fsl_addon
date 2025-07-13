@@ -18,6 +18,7 @@ import org.apache.poi.hssf.usermodel.HSSFEvaluationWorkbook;
 import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.usermodel.HeaderFooter;
 import org.apache.poi.ss.formula.FormulaParseException;
 import org.apache.poi.ss.formula.FormulaParser;
 import org.apache.poi.ss.formula.FormulaParsingWorkbook;
@@ -44,8 +45,10 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellAddress;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellUtil;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFEvaluationWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFHeaderFooterProperties;
 import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -138,6 +141,15 @@ public class Xls extends Executor
 		return getResponse();
 	}
 	
+	/**
+	 * Apply cell styles
+	 * 
+	 * @see MergedCellStyles.class for applyable styles
+	 * 
+	 * @return status 'OK' or 'Fehler'
+	 * @return optional 'errors' array of error messages
+	 * 
+	 */
 	public static String applyCellStyles(String request)
 	{
 		if (createRequestNode(request))
@@ -633,7 +645,7 @@ public class Xls extends Executor
 			}
 			else
 			{
-				result = addErrorMessage("sheet with name '" + sheetNode.asText() + "' does not exist");
+				result = addErrorMessage("Sheet with name '" + sheetNode.asText() + "' does not exist");
 			}
 		}
 		else if (sheetNode.isMissingNode())
@@ -650,21 +662,21 @@ public class Xls extends Executor
 				}
 				else
 				{
-					result = addErrorMessage("sheet with " + Key.INDEX.key() + " " + indexNode.asInt() + " does not exist");
+					result = addErrorMessage("Sheet with " + Key.INDEX.key() + " " + indexNode.asInt() + " does not exist");
 				}
 			}
 			else if (indexNode.isMissingNode())
 			{
-				result = addErrorMessage("missing argument '" + Key.SHEET.key() + "' or '" + Key.INDEX.key() + "'");
+				result = addErrorMessage("Missing argument '" + Key.SHEET.key() + "' or '" + Key.INDEX.key() + "'");
 			}
 			else
 			{
-				result = addErrorMessage("illegal argument '" + Key.INDEX.key() + "'");
+				result = addErrorMessage("Illegal argument '" + Key.INDEX.key() + "'");
 			}
 		}
 		else
 		{
-			result = addErrorMessage("illegal argument '" + Key.SHEET.key() + "'");
+			result = addErrorMessage("Illegal argument '" + Key.SHEET.key() + "'");
 		}
 		if (result)
 		{
@@ -699,7 +711,7 @@ public class Xls extends Executor
 	private static boolean doApplyCellStyles()
 	{
 		boolean result = true;
-		Sheet sheet = getSheet(getRequestNode());
+		Sheet sheet = getSheet();
 		if (Objects.nonNull(sheet))
 		{
 			CellRangeAddress cellRangeAddress = null;
@@ -748,7 +760,7 @@ public class Xls extends Executor
 	private static boolean doApplyFontStyles()
 	{
 		boolean result = true;
-		Sheet sheet = getSheet(getRequestNode());
+		Sheet sheet = getSheet();
 		if (Objects.nonNull(sheet))
 		{
 			CellRangeAddress cellRangeAddress = null;
@@ -806,7 +818,7 @@ public class Xls extends Executor
 	private static boolean doAutoSizeColumns()
 	{
 		boolean result = true;
-		Sheet sheet = getSheet(getRequestNode());
+		Sheet sheet = getSheet();
 		if (Objects.nonNull(sheet))
 		{
 			CellRangeAddress cellRangeAddress = null;
@@ -840,7 +852,7 @@ public class Xls extends Executor
 	private static boolean doCopyCells()
 	{
 		boolean result = true;
-		Sheet sourceSheet = getSheet(getRequestNode());
+		Sheet sourceSheet = getSheet();
 		Sheet targetSheet = sourceSheet;
 		CellRangeAddress sourceCellRangeAddress = null;
 		CellRangeAddress targetCellRangeAddress = null;
@@ -856,27 +868,27 @@ public class Xls extends Executor
 					targetCellRangeAddress = getCellRangeAddress(targetNode);
 					if (Objects.isNull(targetCellRangeAddress))
 					{
-						result = addErrorMessage("illegal argument '" + targetNode.asText() + "'");
+						result = addErrorMessage("Illegal argument '" + targetNode.asText() + "'");
 					}
 				}
 				else if (targetNode.isObject())
 				{
-					targetSheet = getSheet(ObjectNode.class.cast(targetNode));
+					targetSheet = getSheet();
 					targetCellRangeAddress = getCellRangeAddress(targetNode);
 				}
 				else
 				{
-					result = addErrorMessage("illegal argument '" + Key.TARGET.key() + "'");
+					result = addErrorMessage("Illegal argument '" + Key.TARGET.key() + "'");
 				}
 			}
 			else
 			{
-				result = addErrorMessage("illegal argument '" + sourceNode.asText() + "'");
+				result = addErrorMessage("Illegal argument '" + sourceNode.asText() + "'");
 			}
 		}
 		else if (sourceNode.isObject())
 		{
-			sourceSheet = getSheet(ObjectNode.class.cast(sourceNode));
+			sourceSheet = getSheet();
 			sourceCellRangeAddress = getCellRangeAddress(sourceNode);
 			JsonNode targetNode = getRequestNode().findPath(Key.TARGET.key());
 			if (targetNode.isTextual())
@@ -884,22 +896,22 @@ public class Xls extends Executor
 				targetCellRangeAddress = getCellRangeAddress(targetNode);
 				if (Objects.isNull(targetCellRangeAddress))
 				{
-					result = addErrorMessage("illegal argument '" + targetNode.asText() + "'");
+					result = addErrorMessage("Illegal argument '" + targetNode.asText() + "'");
 				}
 			}
 			else if (targetNode.isObject())
 			{
-				targetSheet = getSheet(ObjectNode.class.cast(targetNode));
+				targetSheet = getSheet();
 				targetCellRangeAddress = getCellRangeAddress(targetNode);
 			}
 			else
 			{
-				result = addErrorMessage("illegal argument '" + Key.TARGET.key() + "'");
+				result = addErrorMessage("Illegal argument '" + Key.TARGET.key() + "'");
 			}
 		}
 		else
 		{
-			result = addErrorMessage("illegal argument '" + Key.SOURCE.key() + "'");
+			result = addErrorMessage("Illegal argument '" + Key.SOURCE.key() + "'");
 		}
 		if (Objects.nonNull(sourceCellRangeAddress) && Objects.nonNull(targetCellRangeAddress))
 		{
@@ -907,7 +919,7 @@ public class Xls extends Executor
 			{
 				if (sourceCellRangeAddress.intersects(targetCellRangeAddress))
 				{
-					result = addErrorMessage("source range and target range must not intersect");
+					result = addErrorMessage("Source range and target range must not intersect");
 				}
 			}
 			if (result)
@@ -988,17 +1000,17 @@ public class Xls extends Executor
 				}
 				else
 				{
-					result = addErrorMessage("source and target range dimensions must not differ");
+					result = addErrorMessage("Source and target range dimensions must not differ");
 				}
 			}
 			else
 			{
-				result = addErrorMessage("missing argument 'sheet' for source");
+				result = addErrorMessage("Missing argument 'sheet' for source");
 			}
 		}
 		else
 		{
-			result = addErrorMessage("missing argument 'target'");
+			result = addErrorMessage("Missing argument 'target'");
 		}
 		return result;
 	}
@@ -1022,7 +1034,7 @@ public class Xls extends Executor
 			}
 			catch (IllegalArgumentException e)
 			{
-				result = addErrorMessage("illegal argument 'sheet' ('" + sheetNode.asText() + "' already exists)");
+				result = addErrorMessage("Illegal argument 'sheet' ('" + sheetNode.asText() + "' already exists)");
 			}
 		}
 		if (result)
@@ -1082,7 +1094,7 @@ public class Xls extends Executor
 			}
 			else
 			{
-				result = addErrorMessage("sheet with name '" + sheetNode.asText() + "' does not exist");
+				result = addErrorMessage("Sheet with name '" + sheetNode.asText() + "' does not exist");
 			}
 		}
 		else if (sheetNode.isMissingNode())
@@ -1096,7 +1108,7 @@ public class Xls extends Executor
 				}
 				else
 				{
-					result = addErrorMessage("sheet with " + Key.INDEX.key() + " " + indexNode.asInt() + " does not exist");
+					result = addErrorMessage("Sheet with index '" + indexNode.asInt() + "' does not exist");
 				}
 			}
 			else if (indexNode.isMissingNode())
@@ -1110,7 +1122,7 @@ public class Xls extends Executor
 				}
 				else
 				{
-					result = addErrorMessage("there is no active sheet present");
+					result = addErrorMessage("There is no active sheet present");
 				}
 			}
 		}
@@ -1128,7 +1140,7 @@ public class Xls extends Executor
 		}
 		else
 		{
-			result = addErrorMessage("there is no active sheet present");
+			result = addErrorMessage("There is no active sheet present");
 		}
 		return result;
 	}
@@ -1164,7 +1176,7 @@ public class Xls extends Executor
 		}
 		else if (!sourceNode.isMissingNode())
 		{
-			result = addErrorMessage("illegal argument '" + Key.SOURCE.key() + "'");
+			result = addErrorMessage("Illegal argument '" + Key.SOURCE.key() + "'");
 		}
 		if (result)
 		{
@@ -1175,7 +1187,7 @@ public class Xls extends Executor
 				{
 					if (targetNode.asInt() < 0)
 					{
-						result = addErrorMessage("illegal argument '" + Key.TARGET.key() + "' (sheet index is out of range: " + targetNode.asInt() + ")");
+						result = addErrorMessage("Illegal argument '" + Key.TARGET.key() + "' (sheet index is out of range: " + targetNode.asInt() + ")");
 					}
 						
 					if (activeWorkbook.getActiveSheetIndex() != targetNode.asInt())
@@ -1185,12 +1197,12 @@ public class Xls extends Executor
 				}
 				else
 				{
-					result = addErrorMessage("illegal argument '" + Key.TARGET.key() + "' (sheet index is out of range: " + targetNode.asInt() + " > " + activeWorkbook.getNumberOfSheets() + ")");
+					result = addErrorMessage("Illegal argument '" + Key.TARGET.key() + "' (sheet index is out of range: " + targetNode.asInt() + " > " + activeWorkbook.getNumberOfSheets() + ")");
 				}
 			}
 			else if (targetNode.isMissingNode())
 			{
-				result = addErrorMessage("missing argument '" + Key.TARGET.key() + "'");
+				result = addErrorMessage("Missing argument '" + Key.TARGET.key() + "'");
 			}
 		}
 		return result;
@@ -1225,7 +1237,7 @@ public class Xls extends Executor
 			}
 			else if (!indexNode.isMissingNode())
 			{
-				result = addErrorMessage("illegal argument '" + Key.INDEX.key() + "'");
+				result = addErrorMessage("Illegal argument '" + Key.INDEX.key() + "'");
 			}
 			if (result)
 			{
@@ -1234,11 +1246,11 @@ public class Xls extends Executor
 		}
 		else if (sheetNode.isMissingNode())
 		{
-			result = addErrorMessage("missing argument '" + Key.SHEET.key() + "'");
+			result = addErrorMessage("Missing argument '" + Key.SHEET.key() + "'");
 		}
 		else
 		{
-			result = addErrorMessage("illegal argument '" + Key.SHEET.key() + "'");
+			result = addErrorMessage("Illegal argument '" + Key.SHEET.key() + "'");
 		}
 		return result;
 	}
@@ -1246,7 +1258,7 @@ public class Xls extends Executor
 	private static boolean doRotateCells()
 	{
 		boolean result = true;
-		Sheet sheet = getSheet(getRequestNode());
+		Sheet sheet = getSheet();
 		if (Objects.nonNull(sheet))
 		{
 			CellRangeAddress cellRangeAddress = null;
@@ -1271,11 +1283,11 @@ public class Xls extends Executor
 				}
 				else if (rotationNode.isMissingNode())
 				{
-					result = addErrorMessage("missing argument '" + Key.ROTATION.key() + "'");
+					result = addErrorMessage("Missing argument '" + Key.ROTATION.key() + "'");
 				}
 				else
 				{
-					result = addErrorMessage("illegal argument '" + Key.ROTATION.key() + "'");
+					result = addErrorMessage("Illegal argument '" + Key.ROTATION.key() + "'");
 				}
 				if (rotation != Integer.MIN_VALUE)
 				{
@@ -1315,16 +1327,16 @@ public class Xls extends Executor
 			}
 			catch (Exception e)
 			{
-				result = addErrorMessage("saving workbook failed (" + e.getLocalizedMessage() + ")");
+				result = addErrorMessage("Saving workbook failed (" + e.getLocalizedMessage() + ")");
 			}
 		}
 		else if (pathNode.isMissingNode())
 		{
-			result = addErrorMessage("missing argument '" + Key.PATH.key() + "'");
+			result = addErrorMessage("Missing argument '" + Key.PATH.key() + "'");
 		}
 		else
 		{
-			result = addErrorMessage("illegal argument '" + Key.PATH.key() + "'");
+			result = addErrorMessage("Illegal argument '" + Key.PATH.key() + "'");
 		}
 		return result;
 	}
@@ -1390,7 +1402,7 @@ public class Xls extends Executor
 				{
 					cell.setCellValue(DateUtil.parseDateTime(valueNode.asText()));
 					MergedCellStyle mcs = new MergedCellStyle(cell.getCellStyle());
-					int formatIndex = BuiltinFormats.getBuiltinFormat("m/d/yy");
+					int formatIndex = BuiltinFormats.getBuiltinFormat("M/d/yy");
 					mcs.setDataFormat((short) formatIndex);
 					CellStyle cellStyle = getCellStyle(sheet, mcs);
 					cell.setCellStyle(cellStyle);
@@ -1402,7 +1414,7 @@ public class Xls extends Executor
 						Date date = DateFormat.getDateInstance().parse(valueNode.asText());
 						cell.setCellValue(DateUtil.getExcelDate(date));
 						MergedCellStyle mcs = new MergedCellStyle(cell.getCellStyle());
-						int formatIndex = BuiltinFormats.getBuiltinFormat("m/d/yy");
+						int formatIndex = BuiltinFormats.getBuiltinFormat("M/d/yy");
 						mcs.setDataFormat((short) formatIndex);
 						CellStyle cellStyle = getCellStyle(sheet, mcs);
 						cell.setCellStyle(cellStyle);
@@ -1452,7 +1464,7 @@ public class Xls extends Executor
 	private static boolean doSetCell()
 	{
 		boolean result = true;
-		Sheet sheet = getSheet(getRequestNode());
+		Sheet sheet = getSheet();
 		result = Objects.nonNull(sheet);
 		if (result)
 		{
@@ -1480,12 +1492,12 @@ public class Xls extends Executor
 				}
 				else
 				{
-					result = addErrorMessage("Invalid argument '" + Key.CELL.key() + "'");
+					result = addErrorMessage("Illegal argument '" + Key.CELL.key() + "'");
 				}
 			}
 			else
 			{
-				result = addErrorMessage("Invalid argument '" + Key.VALUE.key() + "'");
+				result = addErrorMessage("Illegal argument '" + Key.VALUE.key() + "'");
 			}
 		}
 		else
@@ -1498,19 +1510,18 @@ public class Xls extends Executor
 	private static boolean doSetCells()
 	{
 		boolean result = true;
-		Sheet sheet = getSheet(getRequestNode());
-		result = Objects.nonNull(sheet);
-		if (result)
+		Sheet sheet = getSheet();
+		if (Objects.nonNull(sheet))
 		{
 			JsonNode cellNode = getRequestNode().findPath(Key.CELL.key());
 			JsonNode valuesNode = getRequestNode().findPath(Key.VALUES.key());
 			if (cellNode.isMissingNode())
 			{
-				result = addErrorMessage("missing argument '" + Key.CELL.key() + "'");
+				result = addErrorMessage("Missing argument '" + Key.CELL.key() + "'");
 			}
 			else if (valuesNode.isMissingNode())
 			{
-				result = addErrorMessage("missing argument '" + Key.VALUES.key() + "'");
+				result = addErrorMessage("Missing argument '" + Key.VALUES.key() + "'");
 			}
 			else if (valuesNode.isObject())
 			{
@@ -1527,7 +1538,7 @@ public class Xls extends Executor
 					}
 					else
 					{
-						result = addErrorMessage("size of 'cell' array does not equal to size of 'values' array");
+						result = addErrorMessage("Size of 'cell' array does not equal to size of 'values' array");
 					}
 				}
 				else
@@ -1542,7 +1553,7 @@ public class Xls extends Executor
 						}
 						catch (Exception e)
 						{
-							result = addErrorMessage("invalid argument 'direction'");
+							result = addErrorMessage("Illegal argument 'direction'");
 						}
 					}
 					else if (directionNode.isMissingNode())
@@ -1550,7 +1561,7 @@ public class Xls extends Executor
 					}
 					else
 					{
-						result = addErrorMessage("invalid argument 'direction'");
+						result = addErrorMessage("Illegal argument 'direction'");
 					}
 					if (result)
 					{
@@ -1564,19 +1575,19 @@ public class Xls extends Executor
 						}
 						else
 						{
-							result = addErrorMessage("invalid argument '" + Key.CELL.key() + "'");
+							result = addErrorMessage("Illegal argument '" + Key.CELL.key() + "'");
 						}
 					}
 				}
 			}
 			else
 			{
-				result = addErrorMessage("invalid argument '" + Key.VALUES.key() + "'");
+				result = addErrorMessage("Illegal argument '" + Key.VALUES.key() + "'");
 			}
 		}
 		else
 		{
-			result = addErrorMessage("missing_argument '" + Key.SHEET.key() + "'");
+			result = addErrorMessage("Missing argument '" + Key.SHEET.key() + "'");
 		}
 		return result;
 	}
@@ -1607,7 +1618,7 @@ public class Xls extends Executor
 			}
 			else
 			{
-				result = addErrorMessage("invalid_argument '" + Key.VALUES.key() + "'");
+				result = addErrorMessage("Invalid_argument '" + Key.VALUES.key() + "'");
 			}
 		}
 		return result;
@@ -1623,7 +1634,7 @@ public class Xls extends Executor
 		}
 		catch (Exception e)
 		{
-			result = addErrorMessage("invalid argument '" + cellNode.asText() + "'");
+			result = addErrorMessage("Illegal argument '" + cellNode.asText() + "'");
 		}
 		return result;
 	}
@@ -1638,7 +1649,7 @@ public class Xls extends Executor
 		}
 		catch (Exception e)
 		{
-			result = addErrorMessage("invalid argument '" + cellNode.asText() + "'");
+			result = addErrorMessage("Illegal argument '" + cellNode.asText() + "'");
 		}
 		return result;
 	}
@@ -1646,69 +1657,151 @@ public class Xls extends Executor
 	private static boolean doSetFooters()
 	{
 		boolean result = true;
-		Sheet sheet = getSheet(getRequestNode());
+		Sheet sheet = getSheet();
 		if (Objects.nonNull(sheet))
 		{
 			Footer footer = sheet.getFooter();
 			JsonNode leftNode = getRequestNode().findPath(Key.LEFT.key());
 			if (leftNode.isTextual())
 			{
-				footer.setLeft(leftNode.asText());
-
+				footer.setLeft(replaceTemplates(TextNode.class.cast(leftNode)));
 			}
 			JsonNode centerNode = getRequestNode().findPath(Key.CENTER.key());
 			if (centerNode.isTextual())
 			{
-				footer.setCenter(centerNode.asText());
-
+				footer.setCenter(replaceTemplates(TextNode.class.cast(centerNode)));
 			}
 			JsonNode rightNode = getRequestNode().findPath(Key.RIGHT.key());
 			if (rightNode.isTextual())
 			{
-				footer.setRight(rightNode.asText());
+				footer.setRight(replaceTemplates(TextNode.class.cast(rightNode)));
 			}
 		}
 		return result;
+	}
+	
+	private static String replaceTemplates(TextNode node)
+	{
+		String text = node.asText();
+		if (text.contains("%page"))
+		{
+			text.replace("%page", HeaderFooter.page());
+		}
+		if (text.contains("%numPages"))
+		{
+			text.replace("%numPages", HeaderFooter.numPages());
+		}
+		if (text.contains("%date"))
+		{
+			text.replace("%date", HeaderFooter.date());
+		}
+		if (text.contains("%time"))
+		{
+			text.replace("%time", HeaderFooter.time());
+		}
+		if (text.contains("%tab"))
+		{
+			text.replace("%tab", HeaderFooter.tab());
+		}
+		return text;
 	}
 	
 	private static boolean doSetHeaders()
 	{
 		boolean result = true;
-		Sheet sheet = getSheet(getRequestNode());
+		Sheet sheet = getSheet();
 		if (Objects.nonNull(sheet))
 		{
-			Header header = sheet.getHeader();
-			JsonNode leftNode = getRequestNode().findPath(Key.LEFT.key());
-			if (leftNode.isTextual())
+			Header header = null;
+			XSSFHeaderFooterProperties props = null;
+			JsonNode typeNode = getRequestNode().get(Key.TYPE.key());
+			if (Objects.isNull(typeNode) || typeNode.isMissingNode() || HSSFSheet.class.isInstance(sheet) || SXSSFSheet.class.isInstance(sheet))
 			{
-				header.setLeft(leftNode.asText());
-
+				header = sheet.getHeader();
 			}
-			JsonNode centerNode = getRequestNode().findPath(Key.CENTER.key());
-			if (centerNode.isTextual())
+			else if (typeNode.isTextual() && XSSFSheet.class.isInstance(sheet))
 			{
-				header.setCenter(centerNode.asText());
-
+				XSSFSheet xssfSheet = XSSFSheet.class.cast(sheet);
+				props = xssfSheet.getHeaderFooterProperties();
+				if (typeNode.asText().equals("first"))
+				{
+					header = xssfSheet.getFirstHeader();
+				}
+				else if (typeNode.asText().equals("even"))
+				{
+					header = xssfSheet.getEvenHeader();
+				}
+				else if (typeNode.asText().equals("odd"))
+				{
+					header = xssfSheet.getOddHeader();
+				}
+				else
+				{
+					addErrorMessage("Illegal type, only 'first', 'even' or 'odd' allowed.");
+				}
 			}
-			JsonNode rightNode = getRequestNode().findPath(Key.RIGHT.key());
-			if (rightNode.isTextual())
+			if (Objects.nonNull(header))
 			{
-				header.setRight(rightNode.asText());
+				JsonNode leftNode = getRequestNode().findPath(Key.LEFT.key());
+				if (leftNode.isTextual())
+				{
+					header.setLeft(replaceTemplates(TextNode.class.cast(leftNode)));
+					
+				}
+				JsonNode centerNode = getRequestNode().findPath(Key.CENTER.key());
+				if (centerNode.isTextual())
+				{
+					header.setCenter(replaceTemplates(TextNode.class.cast(centerNode)));
+				}
+				JsonNode rightNode = getRequestNode().findPath(Key.RIGHT.key());
+				if (rightNode.isTextual())
+				{
+					header.setRight(replaceTemplates(TextNode.class.cast(rightNode)));
+				}
+				if (Objects.nonNull(props))
+				{
+					props.setAlignWithMargins(true);
+					props.setScaleWithDoc(true);
+				}
 			}
 		}
 		return result;
 	}
 	
+	/**
+	 * TODO add cell range to print
+	 * @return
+	 */
 	private static boolean doSetPrintSetup()
 	{
 		boolean result = true;
-		Sheet sheet = getSheet(getRequestNode());
+		Sheet sheet = getSheet();
 		if (Objects.nonNull(sheet))
 		{
+			CellRangeAddress cellRangeAddress = null;
+			JsonNode rangeNode = getRequestNode().get(Key.RANGE.key());
+			if (Objects.nonNull(rangeNode) && !rangeNode.isMissingNode())
+			{
+				cellRangeAddress = getCellRangeAddress(rangeNode);
+			}
+			else
+			{
+				JsonNode cellNode = getRequestNode().get(Key.CELL.key());
+				CellAddress cellAddress = getCellAddress(cellNode);
+				if (Objects.nonNull(cellAddress))
+				{
+					cellRangeAddress = new CellRangeAddress(cellAddress.getRow(), cellAddress.getRow(), cellAddress.getColumn(), cellAddress.getColumn());
+				}
+			}
+			if (Objects.nonNull(cellRangeAddress))
+			{
+				sheet.getWorkbook().setPrintArea(sheet.getWorkbook().getSheetIndex(sheet), cellRangeAddress.getFirstColumn(), cellRangeAddress.getLastColumn(), cellRangeAddress.getFirstRow(), cellRangeAddress.getLastRow());
+			}
+
+			PrintOrientation orientation = PrintOrientation.DEFAULT;
 			JsonNode orientationNode = getRequestNode().findPath(Key.ORIENTATION.key());
 			if (!orientationNode.isMissingNode())
 			{
-				PrintOrientation orientation = PrintOrientation.DEFAULT;
 				if (orientationNode.isTextual())
 				{
 					try
@@ -1717,7 +1810,7 @@ public class Xls extends Executor
 					}
 					catch (Exception e)
 					{
-						result = addErrorMessage("invalid argument 'orientation'");
+						result = addErrorMessage("Illegal argument 'orientation'");
 					}
 				}
 				switch (orientation)
@@ -1760,14 +1853,14 @@ public class Xls extends Executor
 	private static CellAddress getCellAddress(JsonNode cellNode)
 	{
 		CellAddress cellAddress = null;
-		if (!cellNode.isMissingNode())
+		if (Objects.nonNull(cellNode) && !cellNode.isMissingNode())
 		{
 			if (cellNode.isTextual())
 			{
 				cellAddress = new CellAddress(cellNode.asText());
 //				if (Objects.isNull(cellAddress))
 //				{
-//					addErrorMessage("illegal argument '" + cellNode.asText() + "'");
+//					addErrorMessage("Illegal argument '" + cellNode.asText() + "'");
 //				}
 			}
 			else if (cellNode.isObject())
@@ -1782,25 +1875,25 @@ public class Xls extends Executor
 					}
 					else if (columnNode.isMissingNode())
 					{
-						addErrorMessage("missing argument '" + Key.COL.key() + "'");
+						addErrorMessage("Missing argument '" + Key.COL.key() + "'");
 					}
 					else
 					{
-						addErrorMessage("illegal argument '" + Key.COL.key() + "'");
+						addErrorMessage("Illegal argument '" + Key.COL.key() + "'");
 					}
 				}
 				else if (rowNode.isMissingNode())
 				{
-					addErrorMessage("missing argument '" + Key.ROW.key() + "'");
+					addErrorMessage("Missing argument '" + Key.ROW.key() + "'");
 				}
 				else
 				{
-					addErrorMessage("illegal argument '" + Key.ROW.key() + "'");
+					addErrorMessage("Illegal argument '" + Key.ROW.key() + "'");
 				}
 			}
 			else
 			{
-				addErrorMessage("illegal argument '" + Key.CELL.key() + "'");
+				addErrorMessage("Illegal argument '" + Key.CELL.key() + "'");
 			}
 		}
 		return cellAddress;
@@ -1814,7 +1907,7 @@ public class Xls extends Executor
 			cellAddress = new CellAddress(cellNode.asText());
 //			if (Objects.isNull(cellAddress))
 //			{
-//				addErrorMessage("illegal argument '" + cellNode.asText() + "'");
+//				addErrorMessage("Illegal argument '" + cellNode.asText() + "'");
 //			}
 		}
 		else if (cellNode.isObject())
@@ -1823,11 +1916,11 @@ public class Xls extends Executor
 		}
 		else if (Objects.isNull(cellNode) || cellNode.isMissingNode())
 		{
-			addErrorMessage("missing argument '" + key + "'");
+			addErrorMessage("Missing argument '" + key + "'");
 		}
 		else
 		{
-			addErrorMessage("invalid argument '" + key + "'");
+			addErrorMessage("Illegal argument '" + key + "'");
 		}
 		return cellAddress;
 	}
@@ -1835,7 +1928,7 @@ public class Xls extends Executor
 	private static CellRangeAddress getCellRangeAddress(JsonNode rangeNode)
 	{
 		CellRangeAddress cellRangeAddress = null;
-		if (!rangeNode.isMissingNode())
+		if (Objects.nonNull(rangeNode) && !rangeNode.isMissingNode())
 		{
 			CellAddress topLeftAddress = null;
 			CellAddress bottomRightAddress = null;
@@ -1883,12 +1976,12 @@ public class Xls extends Executor
 							}
 							else
 							{
-								addErrorMessage("illegal argument '" + Key.LEFT.key() + "'");
+								addErrorMessage("Illegal argument '" + Key.LEFT.key() + "'");
 							}
 						}
 						else
 						{
-							addErrorMessage("illegal argument '" + Key.TOP.key() + "'");
+							addErrorMessage("Illegal argument '" + Key.TOP.key() + "'");
 						}
 					}
 				}
@@ -1919,7 +2012,7 @@ public class Xls extends Executor
 //											}
 //											else
 //											{
-//												addErrorMessage("illegal argument '" + Key.BOTTOM_RIGHT.key() + "'");
+//												addErrorMessage("Illegal argument '" + Key.BOTTOM_RIGHT.key() + "'");
 //											}
 //										}
 //										else
@@ -1929,29 +2022,29 @@ public class Xls extends Executor
 									}
 									else
 									{
-										addErrorMessage("illegal argument '" + Key.LEFT.key() + "'");
+										addErrorMessage("Illegal argument '" + Key.LEFT.key() + "'");
 									}
 								}
 								else
 								{
-									addErrorMessage("illegal argument '" + Key.TOP.key() + "'");
+									addErrorMessage("Illegal argument '" + Key.TOP.key() + "'");
 								}
 							}
 						}
 						else
 						{
-							addErrorMessage("illegal argument '" + Key.LEFT.key() + "'");
+							addErrorMessage("Illegal argument '" + Key.LEFT.key() + "'");
 						}
 					}
 					else
 					{
-						addErrorMessage("illegal argument '" + Key.TOP.key() + "'");
+						addErrorMessage("Illegal argument '" + Key.TOP.key() + "'");
 					}
 				}
 			}
 			else
 			{
-				addErrorMessage("illegal argument '" + Key.RANGE.key() + "'");
+				addErrorMessage("Illegal argument '" + Key.RANGE.key() + "'");
 			}
 		}
 		return cellRangeAddress;
@@ -2058,7 +2151,7 @@ public class Xls extends Executor
 			}
 			else
 			{
-				addErrorMessage("illegal cell index (" + colIndex + " > " + activeWorkbook.getSpreadsheetVersion().getLastColumnIndex() + ")");
+				addErrorMessage("Illegal cell index (" + colIndex + " > " + activeWorkbook.getSpreadsheetVersion().getLastColumnIndex() + ")");
 			}
 		}
 		return cell;
@@ -2091,12 +2184,12 @@ public class Xls extends Executor
 		}
 		else
 		{
-			addErrorMessage("illegal row index (" + rowIndex + " > " + sheet.getWorkbook().getSpreadsheetVersion().getLastRowIndex() + ")");
+			addErrorMessage("Illegal row index (" + rowIndex + " > " + sheet.getWorkbook().getSpreadsheetVersion().getLastRowIndex() + ")");
 		}
 		return row;
 	}
 
-	private static Sheet getSheet(ObjectNode parentNode)
+	private static Sheet getSheet()
 	{
 		Sheet sheet = null;
 		try
@@ -2112,7 +2205,7 @@ public class Xls extends Executor
 					sheet = activeWorkbook.getSheetAt(indexNode.asInt());
 					if (Objects.isNull(sheet))
 					{
-						addErrorMessage("sheet with index '" + indexNode.asInt() + "' does not exist");
+						addErrorMessage("Sheet with index '" + indexNode.asInt() + "' does not exist");
 					}
 				}
 				else if (indexNode.isTextual())
@@ -2120,12 +2213,12 @@ public class Xls extends Executor
 					sheet = activeWorkbook.getSheet(indexNode.asText());
 					if (Objects.isNull(sheet))
 					{
-						addErrorMessage("sheet with index '" + indexNode.asText() + "' does not exist");
+						addErrorMessage("Sheet with index '" + indexNode.asText() + "' does not exist");
 					}
 				}
 				else if (!indexNode.isMissingNode())
 				{
-					addErrorMessage("illegal argument '" + Key.INDEX.key() + "'");
+					addErrorMessage("Illegal argument '" + Key.INDEX.key() + "'");
 				}
 			}
 			else if (sheetNode.isTextual())
@@ -2133,7 +2226,7 @@ public class Xls extends Executor
 				sheet = activeWorkbook.getSheet(sheetNode.asText());
 				if (Objects.isNull(sheet))
 				{
-					addErrorMessage("sheet with name '" + sheetNode.asText() + "' does not exist");
+					addErrorMessage("Sheet with name '" + sheetNode.asText() + "' does not exist");
 				}
 			}
 			else if (sheetNode.isInt())
@@ -2141,18 +2234,18 @@ public class Xls extends Executor
 				sheet = activeWorkbook.getSheetAt(sheetNode.asInt());
 				if (Objects.isNull(sheet))
 				{
-					addErrorMessage("sheet with index '" + sheetNode.asInt() + "' does not exist");
+					addErrorMessage("Sheet with index '" + sheetNode.asInt() + "' does not exist");
 				}
 			}
 			else
 			{
-				addErrorMessage("illegal argument '" + Key.SHEET.key() + "'");
+				addErrorMessage("Illegal argument '" + Key.SHEET.key() + "'");
 			}
 		}
 		catch (IllegalArgumentException e)
 		{
 			sheet = null;
-			addErrorMessage(e.getLocalizedMessage().toLowerCase());
+			addErrorMessage(e.getLocalizedMessage());
 		}
 		return sheet;
 	}
@@ -2197,7 +2290,7 @@ public class Xls extends Executor
 		boolean result = true;
 		if (Objects.isNull(activeWorkbook))
 		{
-			result = addErrorMessage("workbook missing (create workbook first)");
+			result = addErrorMessage("Workbook missing (create workbook first)");
 		}
 		return result;
 	}

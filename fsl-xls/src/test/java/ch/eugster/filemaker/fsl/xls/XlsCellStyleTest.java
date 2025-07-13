@@ -103,7 +103,7 @@ public final class XlsCellStyleTest extends AbstractXlsTest
 		responseNode = mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
-		assertEquals("illegal argument 'alignment.horizontal' (gigi)", responseNode.get(Executor.ERRORS).get(0).asText());
+		assertEquals("Illegal argument 'alignment.horizontal' (gigi)", responseNode.get(Executor.ERRORS).get(0).asText());
 
 		requestNode = mapper.createObjectNode();
 		requestNode.put(Key.PATH.key(), "results/testHorizontalAlignment");
@@ -202,7 +202,7 @@ public final class XlsCellStyleTest extends AbstractXlsTest
 		responseNode = mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
-		assertEquals("illegal argument 'alignment.horizontal' (gigi)", responseNode.get(Executor.ERRORS).get(0).asText());
+		assertEquals("Illegal argument 'alignment.horizontal' (gigi)", responseNode.get(Executor.ERRORS).get(0).asText());
 
 		requestNode = mapper.createObjectNode();
 		requestNode.put(Key.PATH.key(), "results/testHorizontalAlignmentRange");
@@ -290,7 +290,7 @@ public final class XlsCellStyleTest extends AbstractXlsTest
 		responseNode = mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
-		assertEquals("illegal argument 'alignment.vertical' (gigi)", responseNode.get(Executor.ERRORS).get(0).asText());
+		assertEquals("Illegal argument 'alignment.vertical' (gigi)", responseNode.get(Executor.ERRORS).get(0).asText());
 
 		requestNode = mapper.createObjectNode();
 		requestNode.put(Key.PATH.key(), "results/testVerticalAlignment");
@@ -389,7 +389,7 @@ public final class XlsCellStyleTest extends AbstractXlsTest
 		responseNode = mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
-		assertEquals("illegal argument 'alignment.vertical' (gigi)", responseNode.get(Executor.ERRORS).get(0).asText());
+		assertEquals("Illegal argument 'alignment.vertical' (gigi)", responseNode.get(Executor.ERRORS).get(0).asText());
 
 		requestNode = mapper.createObjectNode();
 		requestNode.put(Key.PATH.key(), "results/testVerticalAlignmentRange");
@@ -481,7 +481,7 @@ public final class XlsCellStyleTest extends AbstractXlsTest
 		responseNode = mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
-		assertEquals("illegal argument 'border.style.top' (gigi)", responseNode.get(Executor.ERRORS).get(0).asText());
+		assertEquals("Illegal argument 'border.style.top' (gigi)", responseNode.get(Executor.ERRORS).get(0).asText());
 
 		requestNode = mapper.createObjectNode();
 		requestNode.put(Key.PATH.key(), "results/testBorderStyles");
@@ -573,7 +573,7 @@ public final class XlsCellStyleTest extends AbstractXlsTest
 		responseNode = mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
-		assertEquals("illegal argument 'border.style.top' (gigi)", responseNode.get(Executor.ERRORS).get(0).asText());
+		assertEquals("Illegal argument 'border.style.top' (gigi)", responseNode.get(Executor.ERRORS).get(0).asText());
 
 		requestNode = mapper.createObjectNode();
 		requestNode.put(Key.PATH.key(), "results/testBorderStyleRange");

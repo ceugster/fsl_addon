@@ -103,7 +103,7 @@ class MergedCellStyle implements MessageProvider
 				}
 				catch (Exception e)
 				{
-					result = addErrorMessage(responseNode, "illegal argument 'alignment.horizontal' (" + horizontalNode.asText() + ")");
+					result = addErrorMessage(responseNode, "Illegal argument 'alignment.horizontal' (" + horizontalNode.asText() + ")");
 				}
 			}
 			JsonNode verticalNode = alignmentNode.findPath(Key.VERTICAL.key());
@@ -115,7 +115,7 @@ class MergedCellStyle implements MessageProvider
 				}
 				catch (Exception e)
 				{
-					result = addErrorMessage(responseNode, "illegal argument 'alignment.vertical' (" + verticalNode.asText() + ")");
+					result = addErrorMessage(responseNode, "Illegal argument 'alignment.vertical' (" + verticalNode.asText() + ")");
 				}
 			}
 		}
@@ -135,7 +135,7 @@ class MergedCellStyle implements MessageProvider
 					}
 					else
 					{
-						result = addErrorMessage(responseNode, "illegal argument 'border.style.bottom' (" + bottomNode.asText() + ")");
+						result = addErrorMessage(responseNode, "Illegal argument 'border.style.bottom' (" + bottomNode.asText() + ")");
 					}
 				}
 				JsonNode leftNode = styleNode.findPath(Key.LEFT.key());
@@ -148,7 +148,7 @@ class MergedCellStyle implements MessageProvider
 					}
 					else
 					{
-						result = addErrorMessage(responseNode, "illegal argument 'border.style.left' (" + leftNode.asText() + ")");
+						result = addErrorMessage(responseNode, "Illegal argument 'border.style.left' (" + leftNode.asText() + ")");
 					}
 				}
 				JsonNode rightNode = styleNode.findPath(Key.RIGHT.key());
@@ -161,7 +161,7 @@ class MergedCellStyle implements MessageProvider
 					}
 					else
 					{
-						result = addErrorMessage(responseNode, "illegal argument 'border.style.right' (" + rightNode.asText() + ")");
+						result = addErrorMessage(responseNode, "Illegal argument 'border.style.right' (" + rightNode.asText() + ")");
 					}
 				}
 				JsonNode topNode = styleNode.findPath(Key.TOP.key());
@@ -174,7 +174,7 @@ class MergedCellStyle implements MessageProvider
 					}
 					else
 					{
-						result = addErrorMessage(responseNode, "illegal argument 'border.style.top' (" + topNode.asText() + ")");
+						result = addErrorMessage(responseNode, "Illegal argument 'border.style.top' (" + topNode.asText() + ")");
 					}
 				}
 			}
@@ -192,7 +192,7 @@ class MergedCellStyle implements MessageProvider
 						}
 						catch (Exception e)
 						{
-							result = addErrorMessage(responseNode, "illegal argument 'border.color.bottom' (" + bottomNode.asText() + ")");
+							result = addErrorMessage(responseNode, "Illegal argument 'border.color.bottom' (" + bottomNode.asText() + ")");
 						}
 					}
 					else if (bottomNode.isInt())
@@ -203,12 +203,12 @@ class MergedCellStyle implements MessageProvider
 						}
 						catch (Exception e)
 						{
-							result = addErrorMessage(responseNode, "illegal argument 'border.color.bottom' (" + bottomNode.asInt() + ")");
+							result = addErrorMessage(responseNode, "Illegal argument 'border.color.bottom' (" + bottomNode.asInt() + ")");
 						}
 					}
 					else
 					{
-						result = addErrorMessage(responseNode, "illegal argument 'border.color.bottom' (" + bottomNode.asText() + ")");
+						result = addErrorMessage(responseNode, "Illegal argument 'border.color.bottom' (" + bottomNode.asText() + ")");
 					}
 				}
 				JsonNode leftNode = colorNode.findPath(Key.LEFT.key());
@@ -222,7 +222,7 @@ class MergedCellStyle implements MessageProvider
 						}
 						catch (Exception e)
 						{
-							result = addErrorMessage(responseNode, "illegal argument 'border.color.left' (" + leftNode.asText() + ")");
+							result = addErrorMessage(responseNode, "Illegal argument 'border.color.left' (" + leftNode.asText() + ")");
 						}
 					}
 					else if (leftNode.isInt())
@@ -233,12 +233,12 @@ class MergedCellStyle implements MessageProvider
 						}
 						catch (Exception e)
 						{
-							result = addErrorMessage(responseNode, "illegal argument 'border.color.left' (" + leftNode.asInt() + ")");
+							result = addErrorMessage(responseNode, "Illegal argument 'border.color.left' (" + leftNode.asInt() + ")");
 						}
 					}
 					else
 					{
-						result = addErrorMessage(responseNode, "illegal argument 'border.color.left' (" + leftNode.asText() + ")");
+						result = addErrorMessage(responseNode, "Illegal argument 'border.color.left' (" + leftNode.asText() + ")");
 					}
 				}
 				JsonNode rightNode = colorNode.findPath(Key.RIGHT.key());
@@ -252,7 +252,7 @@ class MergedCellStyle implements MessageProvider
 						}
 						catch (Exception e)
 						{
-							result = addErrorMessage(responseNode, "illegal argument 'border.color.right' (" + rightNode.asText() + ")");
+							result = addErrorMessage(responseNode, "Illegal argument 'border.color.right' (" + rightNode.asText() + ")");
 						}
 					}
 					else if (rightNode.isInt())
@@ -263,12 +263,12 @@ class MergedCellStyle implements MessageProvider
 						}
 						catch (Exception e)
 						{
-							result = addErrorMessage(responseNode, "illegal argument 'border.color.right' (" + rightNode.asInt() + ")");
+							result = addErrorMessage(responseNode, "Illegal argument 'border.color.right' (" + rightNode.asInt() + ")");
 						}
 					}
 					else
 					{
-						result = addErrorMessage(responseNode, "illegal argument 'border.color.right' (" + rightNode.asText() + ")");
+						result = addErrorMessage(responseNode, "Illegal argument 'border.color.right' (" + rightNode.asText() + ")");
 					}
 				}
 				JsonNode topNode = colorNode.findPath(Key.TOP.key());
@@ -282,7 +282,7 @@ class MergedCellStyle implements MessageProvider
 						}
 						catch (Exception e)
 						{
-							result = addErrorMessage(responseNode, "illegal argument 'border.color.top' (" + topNode.asText() + ")");
+							result = addErrorMessage(responseNode, "Illegal argument 'border.color.top' (" + topNode.asText() + ")");
 						}
 					}
 					else if (topNode.isInt())
@@ -293,12 +293,12 @@ class MergedCellStyle implements MessageProvider
 						}
 						catch (Exception e)
 						{
-							result = addErrorMessage(responseNode, "illegal argument 'border.color.top' (" + topNode.asInt() + ")");
+							result = addErrorMessage(responseNode, "Illegal argument 'border.color.top' (" + topNode.asInt() + ")");
 						}
 					}
 					else
 					{
-						result = addErrorMessage(responseNode, "illegal argument 'border.color.top' (" + topNode.asText() + ")");
+						result = addErrorMessage(responseNode, "Illegal argument 'border.color.top' (" + topNode.asText() + ")");
 					}
 				}
 			}
@@ -325,7 +325,7 @@ class MergedCellStyle implements MessageProvider
 				}
 				catch (Exception e)
 				{
-					result = addErrorMessage(responseNode, "illegal argument 'background.color' (" + colorNode.asText() + ")");
+					result = addErrorMessage(responseNode, "Illegal argument 'background.color' (" + colorNode.asText() + ")");
 				}
 			}
 			else if (colorNode.isInt())
@@ -336,12 +336,12 @@ class MergedCellStyle implements MessageProvider
 				}
 				catch (Exception e)
 				{
-					result = addErrorMessage(responseNode, "illegal argument 'background.color' (" + colorNode.asInt() + ")");
+					result = addErrorMessage(responseNode, "Illegal argument 'background.color' (" + colorNode.asInt() + ")");
 				}
 			}
 			else
 			{
-				result = addErrorMessage(responseNode, "illegal argument 'background.color' (" + colorNode.asText() + ")");
+				result = addErrorMessage(responseNode, "Illegal argument 'background.color' (" + colorNode.asText() + ")");
 			}
 		}
 		JsonNode fgNode = requestNode.findPath(Key.FOREGROUND.key());
@@ -356,7 +356,7 @@ class MergedCellStyle implements MessageProvider
 				}
 				catch (Exception e)
 				{
-					result = addErrorMessage(responseNode, "illegal argument 'foreground.color' (" + colorNode.asText() + ")");
+					result = addErrorMessage(responseNode, "Illegal argument 'foreground.color' (" + colorNode.asText() + ")");
 				}
 			}
 			else if (colorNode.isInt())
@@ -367,12 +367,12 @@ class MergedCellStyle implements MessageProvider
 				}
 				catch (Exception e)
 				{
-					result = addErrorMessage(responseNode, "illegal argument 'foreground.color' (" + colorNode.asInt() + ")");
+					result = addErrorMessage(responseNode, "Illegal argument 'foreground.color' (" + colorNode.asInt() + ")");
 				}
 			}
 			else
 			{
-				result = addErrorMessage(responseNode, "illegal argument 'foreground.color' (" + colorNode.asText() + ")");
+				result = addErrorMessage(responseNode, "Illegal argument 'foreground.color' (" + colorNode.asText() + ")");
 			}
 		}
 		JsonNode fillPatternNode = requestNode.findPath(Key.FILL_PATTERN.key());
@@ -386,7 +386,7 @@ class MergedCellStyle implements MessageProvider
 				}
 				catch (Exception e)
 				{
-					result = addErrorMessage(responseNode, "illegal argument '" + Key.FILL_PATTERN.key() + "' (" + fillPattern + ")");
+					result = addErrorMessage(responseNode, "Illegal argument '" + Key.FILL_PATTERN.key() + "' (" + fillPattern + ")");
 				}
 			}
 		}
@@ -399,7 +399,7 @@ class MergedCellStyle implements MessageProvider
 			}
 			else
 			{
-				result = addErrorMessage(responseNode, "illegal argument 'font' (" + fontIndex + ")");
+				result = addErrorMessage(responseNode, "Illegal argument 'font' (" + fontIndex + ")");
 			}
 		}
 		JsonNode shrinkToFitNode = requestNode.findPath(Key.SHRINK_TO_FIT.key());

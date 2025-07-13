@@ -60,7 +60,7 @@ class MergedFont implements MessageProvider
 			}
 			else
 			{
-				result = addErrorMessage(responseNode, "invalid argument 'size' (" + s + ")");
+				result = addErrorMessage(responseNode, "Illegal argument 'size' (" + s + ")");
 			}
 		}
 		JsonNode styleNode = requestNode.findPath(Key.STYLE.key());
@@ -118,7 +118,7 @@ class MergedFont implements MessageProvider
 			}
 			catch (Exception e)
 			{
-				result = addErrorMessage(responseNode, "invalid argument 'underline' (" + u + ")");
+				result = addErrorMessage(responseNode, "Illegal argument 'underline' (" + u + ")");
 			}
 		}
 		if (underlineNode.isInt())
@@ -130,7 +130,7 @@ class MergedFont implements MessageProvider
 			}
 			catch (Exception e)
 			{
-				result = addErrorMessage(responseNode, "invalid argument 'underline' (" + u + ")");
+				result = addErrorMessage(responseNode, "Illegal argument 'underline' (" + u + ")");
 			}
 		}
 		JsonNode strikeOutNode = requestNode.findPath(Key.STRIKE_OUT.key());
@@ -151,7 +151,7 @@ class MergedFont implements MessageProvider
 			}
 			catch (Exception e)
 			{
-				result = addErrorMessage(responseNode, "invalid argument 'type_offset' (" + t + ")");
+				result = addErrorMessage(responseNode, "Illegal argument 'type_offset' (" + t + ")");
 			}
 		}
 		if (typeOffsetNode.isInt())
@@ -166,7 +166,7 @@ class MergedFont implements MessageProvider
 			}
 			catch (Exception e)
 			{
-				result = addErrorMessage(responseNode, "invalid argument 'type_offset' (" + t + ")");
+				result = addErrorMessage(responseNode, "Illegal argument 'type_offset' (" + t + ")");
 			}
 		}
 		JsonNode colorNode = requestNode.findPath(Key.COLOR.key());
@@ -180,7 +180,7 @@ class MergedFont implements MessageProvider
 				}
 				catch (Exception e)
 				{
-					result = addErrorMessage(responseNode, "invalid argument 'foreground.color' (" + colorNode.asText() + ")");
+					result = addErrorMessage(responseNode, "Illegal argument 'foreground.color' (" + colorNode.asText() + ")");
 				}
 			}
 			else if (colorNode.isInt())
@@ -191,12 +191,12 @@ class MergedFont implements MessageProvider
 				}
 				catch (Exception e)
 				{
-					result = addErrorMessage(responseNode, "invalid argument 'foreground.color' (" + colorNode.asInt() + ")");
+					result = addErrorMessage(responseNode, "Illegal argument 'foreground.color' (" + colorNode.asInt() + ")");
 				}
 			}
 			else
 			{
-				result = addErrorMessage(responseNode, "invalid argument 'foreground.color' (" + colorNode.asText() + ")");
+				result = addErrorMessage(responseNode, "Illegal argument 'foreground.color' (" + colorNode.asText() + ")");
 			}
 		}
 		return result;

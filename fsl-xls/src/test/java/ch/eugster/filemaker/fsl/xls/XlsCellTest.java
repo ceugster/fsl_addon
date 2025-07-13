@@ -69,7 +69,7 @@ public final class XlsCellTest extends AbstractXlsTest
 		JsonNode responseNode = mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
-		assertEquals("workbook missing (create workbook first)", responseNode.get(Executor.ERRORS).get(0).asText());
+		assertEquals("Workbook missing (create workbook first)", responseNode.get(Executor.ERRORS).get(0).asText());
 	}
 
 	@Test
@@ -104,11 +104,11 @@ public final class XlsCellTest extends AbstractXlsTest
 		while (iterator.hasNext())
 		{
 			JsonNode errorNode = iterator.next();
-			if ("sheet index (0) is out of range (no sheets)".equals(errorNode.asText()))
+			if ("Sheet index (0) is out of range (no sheets)".equals(errorNode.asText()))
 			{
 				assertTrue(true);
 			}
-			else if ("missing_argument 'sheet'".equals(errorNode.asText()))
+			else if ("Missing argument 'sheet'".equals(errorNode.asText()))
 			{
 				assertTrue(true);
 			}

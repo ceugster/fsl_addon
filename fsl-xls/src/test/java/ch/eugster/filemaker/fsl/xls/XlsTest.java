@@ -15,6 +15,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.PrintOrientation;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.Test;
@@ -66,7 +67,7 @@ public final class XlsTest extends AbstractXlsTest
 		JsonNode responseNode = mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
-		assertEquals("missing argument 'request'", responseNode.get(Executor.ERRORS).get(0).asText());
+		assertEquals("Missing argument 'request'", responseNode.get(Executor.ERRORS).get(0).asText());
 	}
 	
 	@Test
@@ -185,7 +186,7 @@ public final class XlsTest extends AbstractXlsTest
 		JsonNode responseNode = mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
-		assertEquals("workbook missing (create workbook first)", responseNode.get(Executor.ERRORS).get(0).asText());
+		assertEquals("Workbook missing (create workbook first)", responseNode.get(Executor.ERRORS).get(0).asText());
 
 		Xls.activeWorkbook = new XSSFWorkbook();
 
@@ -256,7 +257,7 @@ public final class XlsTest extends AbstractXlsTest
 		JsonNode responseNode = mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
-		assertEquals("workbook missing (create workbook first)", responseNode.get(Executor.ERRORS).get(0).asText());
+		assertEquals("Workbook missing (create workbook first)", responseNode.get(Executor.ERRORS).get(0).asText());
 
 		response = Xls.createWorkbook(mapper.createObjectNode().toString());
 
@@ -293,7 +294,7 @@ public final class XlsTest extends AbstractXlsTest
 		assertNull(responseNode.get(Key.INDEX.key()));
 		assertEquals("Sheet0", responseNode.get(Key.SHEET.key()).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
-		assertEquals("illegal argument 'sheet' ('Sheet0' already exists)", responseNode.get(Executor.ERRORS).get(0).asText());
+		assertEquals("Illegal argument 'sheet' ('Sheet0' already exists)", responseNode.get(Executor.ERRORS).get(0).asText());
 	}
 
 	@Test
@@ -308,7 +309,7 @@ public final class XlsTest extends AbstractXlsTest
 		JsonNode responseNode = mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
-		assertEquals("workbook missing (create workbook first)", responseNode.get(Executor.ERRORS).get(0).asText());
+		assertEquals("Workbook missing (create workbook first)", responseNode.get(Executor.ERRORS).get(0).asText());
 
 		Xls.activeWorkbook = new XSSFWorkbook();
 
@@ -317,7 +318,7 @@ public final class XlsTest extends AbstractXlsTest
 		responseNode = mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
-		assertEquals("there is no active sheet present", responseNode.get(Executor.ERRORS).get(0).asText());
+		assertEquals("There is no active sheet present", responseNode.get(Executor.ERRORS).get(0).asText());
 
 		requestNode = mapper.createObjectNode();
 		requestNode.put(Key.SHEET.key(), "Arbeitsblatt 1");
@@ -327,7 +328,7 @@ public final class XlsTest extends AbstractXlsTest
 		responseNode = mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
-		assertEquals("sheet with name 'Arbeitsblatt 1' does not exist", responseNode.get(Executor.ERRORS).get(0).asText());
+		assertEquals("Sheet with name 'Arbeitsblatt 1' does not exist", responseNode.get(Executor.ERRORS).get(0).asText());
 
 		Xls.activeWorkbook.createSheet("Arbeitsblatt 1");
 		
@@ -349,7 +350,7 @@ public final class XlsTest extends AbstractXlsTest
 		JsonNode responseNode = mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
-		assertEquals("workbook missing (create workbook first)", responseNode.get(Executor.ERRORS).get(0).asText());
+		assertEquals("Workbook missing (create workbook first)", responseNode.get(Executor.ERRORS).get(0).asText());
 		
 		response = Xls.createWorkbook(mapper.createObjectNode().toString());
 		
@@ -385,7 +386,7 @@ public final class XlsTest extends AbstractXlsTest
 		assertEquals(0, Xls.activeWorkbook.getActiveSheetIndex());
 		assertEquals("Tabelle 1", sheetNode.get(0).asText());
 		
-		JsonNode indexNode = responseNode.get("index");
+		JsonNode indexNode = responseNode.get(Key.INDEX.key());
 		assertTrue(ArrayNode.class.isInstance(indexNode));
 		assertEquals(1, indexNode.size());
 		assertEquals(0, Xls.activeWorkbook.getActiveSheetIndex());
@@ -410,7 +411,7 @@ public final class XlsTest extends AbstractXlsTest
 		assertEquals(0, Xls.activeWorkbook.getActiveSheetIndex());
 		assertEquals("Arbeitsblatt 1", sheetNode.get(1).asText());
 		
-		indexNode = responseNode.get("index");
+		indexNode = responseNode.get(Key.INDEX.key());
 		assertTrue(ArrayNode.class.isInstance(indexNode));
 		assertEquals(2, indexNode.size());
 		assertEquals(0, Xls.activeWorkbook.getActiveSheetIndex());
@@ -427,7 +428,7 @@ public final class XlsTest extends AbstractXlsTest
 		JsonNode responseNode = mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
-		assertEquals("workbook missing (create workbook first)", responseNode.get(Executor.ERRORS).get(0).asText());
+		assertEquals("Workbook missing (create workbook first)", responseNode.get(Executor.ERRORS).get(0).asText());
 
 		response = Xls.createWorkbook(mapper.createObjectNode().toString());
 		
@@ -442,7 +443,7 @@ public final class XlsTest extends AbstractXlsTest
 		responseNode = mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
-		assertEquals("missing argument 'sheet' or 'index'", responseNode.get(Executor.ERRORS).get(0).asText());
+		assertEquals("Missing argument 'sheet' or 'index'", responseNode.get(Executor.ERRORS).get(0).asText());
 
 		requestNode = mapper.createObjectNode();
 		requestNode.put(Key.SHEET.key(), "Wrong Name");
@@ -452,7 +453,7 @@ public final class XlsTest extends AbstractXlsTest
 		responseNode = mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
-		assertEquals("sheet with name 'Wrong Name' does not exist", responseNode.get(Executor.ERRORS).get(0).asText());
+		assertEquals("Sheet with name 'Wrong Name' does not exist", responseNode.get(Executor.ERRORS).get(0).asText());
 
 		requestNode = mapper.createObjectNode();
 		requestNode.put(Key.SHEET.key(), "Sheet0");
@@ -482,7 +483,7 @@ public final class XlsTest extends AbstractXlsTest
 		responseNode = mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
-		assertEquals("sheet with index 1 does not exist", responseNode.get(Executor.ERRORS).get(0).asText());
+		assertEquals("Sheet with index 1 does not exist", responseNode.get(Executor.ERRORS).get(0).asText());
 		
 		requestNode = mapper.createObjectNode();
 		requestNode.put(Key.INDEX.key(), 0);
@@ -508,7 +509,7 @@ public final class XlsTest extends AbstractXlsTest
 		JsonNode responseNode = mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
-		assertEquals("workbook missing (create workbook first)", responseNode.get(Executor.ERRORS).get(0).asText());
+		assertEquals("Workbook missing (create workbook first)", responseNode.get(Executor.ERRORS).get(0).asText());
 
 		requestNode.put(Key.SHEET.key(), "Tabelle");
 		response = Xls.createWorkbookWithSheet(requestNode.toString());
@@ -545,7 +546,7 @@ public final class XlsTest extends AbstractXlsTest
 		JsonNode responseNode = mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
-		assertEquals("workbook missing (create workbook first)", responseNode.get(Executor.ERRORS).get(0).asText());
+		assertEquals("Workbook missing (create workbook first)", responseNode.get(Executor.ERRORS).get(0).asText());
 
 		Xls.activeWorkbook = new XSSFWorkbook();
 		
@@ -569,7 +570,7 @@ public final class XlsTest extends AbstractXlsTest
 		JsonNode responseNode = mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
-		assertEquals("workbook missing (create workbook first)", responseNode.get(Executor.ERRORS).get(0).asText());
+		assertEquals("Workbook missing (create workbook first)", responseNode.get(Executor.ERRORS).get(0).asText());
 
 		response = Xls.createWorkbook(mapper.createObjectNode().toString());
 
@@ -586,7 +587,7 @@ public final class XlsTest extends AbstractXlsTest
 		responseNode = mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
-		assertEquals("sheet index (0) is out of range (no sheets)", responseNode.get(Executor.ERRORS).get(0).asText());
+		assertEquals("Sheet index (0) is out of range (no sheets)", responseNode.get(Executor.ERRORS).get(0).asText());
 		
 		response = Xls.createWorkbookWithSheet(mapper.createObjectNode().toString());
 
@@ -630,7 +631,7 @@ public final class XlsTest extends AbstractXlsTest
 		responseNode = mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
-		assertEquals("sheet with name 'Test' does not exist", responseNode.get(Executor.ERRORS).get(0).asText());
+		assertEquals("Sheet with name 'Test' does not exist", responseNode.get(Executor.ERRORS).get(0).asText());
 		
 		requestNode = mapper.createObjectNode();
 		requestNode.put(Key.INDEX.key(), 2);
@@ -643,7 +644,7 @@ public final class XlsTest extends AbstractXlsTest
 		responseNode = mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
-		assertEquals("sheet index (2) is out of range (0..1)", responseNode.get(Executor.ERRORS).get(0).asText());
+		assertEquals("Sheet index (2) is out of range (0..1)", responseNode.get(Executor.ERRORS).get(0).asText());
 	}
 
 	@Test
@@ -659,7 +660,7 @@ public final class XlsTest extends AbstractXlsTest
 		JsonNode responseNode = mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
-		assertEquals("workbook missing (create workbook first)", responseNode.get(Executor.ERRORS).get(0).asText());
+		assertEquals("Workbook missing (create workbook first)", responseNode.get(Executor.ERRORS).get(0).asText());
 
 		response = Xls.createWorkbook(mapper.createObjectNode().toString());
 
@@ -676,7 +677,7 @@ public final class XlsTest extends AbstractXlsTest
 		responseNode = mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
-		assertEquals("sheet index (0) is out of range (no sheets)", responseNode.get(Executor.ERRORS).get(0).asText());
+		assertEquals("Sheet index (0) is out of range (no sheets)", responseNode.get(Executor.ERRORS).get(0).asText());
 		
 		response = Xls.createWorkbookWithSheet(mapper.createObjectNode().toString());
 
@@ -720,7 +721,7 @@ public final class XlsTest extends AbstractXlsTest
 		responseNode = mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
-		assertEquals("sheet with name 'Test' does not exist", responseNode.get(Executor.ERRORS).get(0).asText());
+		assertEquals("Sheet with name 'Test' does not exist", responseNode.get(Executor.ERRORS).get(0).asText());
 		
 		requestNode = mapper.createObjectNode();
 		requestNode.put(Key.INDEX.key(), 2);
@@ -733,9 +734,137 @@ public final class XlsTest extends AbstractXlsTest
 		responseNode = mapper.readTree(response);
 		assertEquals(Executor.ERROR, responseNode.get(Executor.STATUS).asText());
 		assertEquals(1, responseNode.get(Executor.ERRORS).size());
-		assertEquals("sheet index (2) is out of range (0..1)", responseNode.get(Executor.ERRORS).get(0).asText());
+		assertEquals("Sheet index (2) is out of range (0..1)", responseNode.get(Executor.ERRORS).get(0).asText());
 	}
 
+	@Test
+	public void testSetPrintSetupWithSingleCellId() throws JsonMappingException, JsonProcessingException, InterruptedException, TimeoutException, ExecutionException
+	{
+		File file = new File("results/SetPrintSetup.xlsx");
+		Xls.activeWorkbook = new XSSFWorkbook();
+		Xls.activeWorkbook.createSheet();
+
+		ObjectNode requestNode = mapper.createObjectNode();
+		requestNode.put(Key.ORIENTATION.key(), PrintOrientation.LANDSCAPE.name().toLowerCase());
+		requestNode.put(Key.COPIES.key(), 2);
+		requestNode.put(Key.CELL.key(), "A1");
+
+		String response = Xls.setPrintSetup(requestNode.toString());
+		
+		JsonNode responseNode = mapper.readTree(response);
+		assertEquals(Executor.OK, responseNode.get(Executor.STATUS).asText());
+		assertNull(responseNode.get(Executor.ERRORS));
+
+		requestNode = mapper.createObjectNode();
+		requestNode.put(Key.PATH.key(), file.getAbsolutePath());
+
+		response = Xls.saveWorkbook(requestNode.toString());
+		
+		responseNode = mapper.readTree(response);
+		assertEquals(Executor.OK, responseNode.get(Executor.STATUS).asText());
+		assertNull(responseNode.get(Executor.ERRORS));
+		assertTrue(file.isFile());
+	}
+	
+	@Test
+	public void testSetPrintSetupWithSingleCellNumericValues() throws JsonMappingException, JsonProcessingException, InterruptedException, TimeoutException, ExecutionException
+	{
+		File file = new File("results/SetPrintSetup.xlsx");
+		Xls.activeWorkbook = new XSSFWorkbook();
+		Xls.activeWorkbook.createSheet();
+
+		ObjectNode requestNode = mapper.createObjectNode();
+		requestNode.put(Key.ORIENTATION.key(), PrintOrientation.LANDSCAPE.name().toLowerCase());
+		requestNode.put(Key.COPIES.key(), 2);
+		ObjectNode cellNode = requestNode.objectNode();
+		cellNode.put(Key.ROW.key(), 0);
+		cellNode.put(Key.COL.key(), 0);
+		requestNode.set(Key.CELL.key(), cellNode);
+
+		String response = Xls.setPrintSetup(requestNode.toString());
+		
+		JsonNode responseNode = mapper.readTree(response);
+		assertEquals(Executor.OK, responseNode.get(Executor.STATUS).asText());
+		assertNull(responseNode.get(Executor.ERRORS));
+
+		requestNode = mapper.createObjectNode();
+		requestNode.put(Key.PATH.key(), file.getAbsolutePath());
+
+		response = Xls.saveWorkbook(requestNode.toString());
+		
+		responseNode = mapper.readTree(response);
+		assertEquals(Executor.OK, responseNode.get(Executor.STATUS).asText());
+		assertNull(responseNode.get(Executor.ERRORS));
+		assertTrue(file.isFile());
+	}
+	
+	@Test
+	public void testSetPrintSetupWithCellRangeIds() throws JsonMappingException, JsonProcessingException, InterruptedException, TimeoutException, ExecutionException
+	{
+		File file = new File("results/SetPrintSetup.xlsx");
+		Xls.activeWorkbook = new XSSFWorkbook();
+		Xls.activeWorkbook.createSheet();
+
+		ObjectNode requestNode = mapper.createObjectNode();
+		requestNode.put(Key.ORIENTATION.key(), PrintOrientation.LANDSCAPE.name().toLowerCase());
+		requestNode.put(Key.COPIES.key(), 2);
+		requestNode.put(Key.RANGE.key(), "A1:K10");
+
+		String response = Xls.setPrintSetup(requestNode.toString());
+		
+		JsonNode responseNode = mapper.readTree(response);
+		assertEquals(Executor.OK, responseNode.get(Executor.STATUS).asText());
+		assertNull(responseNode.get(Executor.ERRORS));
+
+		requestNode = mapper.createObjectNode();
+		requestNode.put(Key.PATH.key(), file.getAbsolutePath());
+
+		response = Xls.saveWorkbook(requestNode.toString());
+		
+		responseNode = mapper.readTree(response);
+		assertEquals(Executor.OK, responseNode.get(Executor.STATUS).asText());
+		assertNull(responseNode.get(Executor.ERRORS));
+		assertTrue(file.isFile());
+	}
+	
+	@Test
+	public void testSetPrintSetupWithCellRangeNumericValues() throws JsonMappingException, JsonProcessingException, InterruptedException, TimeoutException, ExecutionException
+	{
+		File file = new File("results/SetPrintSetup.xlsx");
+		Xls.activeWorkbook = new XSSFWorkbook();
+		Xls.activeWorkbook.createSheet();
+
+		ObjectNode requestNode = mapper.createObjectNode();
+		requestNode.put(Key.ORIENTATION.key(), PrintOrientation.LANDSCAPE.name().toLowerCase());
+		requestNode.put(Key.COPIES.key(), 2);
+		ObjectNode rangeNode = requestNode.objectNode();
+		ObjectNode startNode = rangeNode.objectNode();
+		startNode.put(Key.ROW.key(), 0);
+		startNode.put(Key.COL.key(), 0);
+		rangeNode.set(Key.TOP_LEFT.key(), startNode);
+		ObjectNode endNode = rangeNode.objectNode();
+		endNode.put(Key.ROW.key(), 10);
+		endNode.put(Key.COL.key(), 10);
+		rangeNode.set(Key.BOTTOM_RIGHT.key(), endNode);
+		requestNode.set(Key.RANGE.key(), rangeNode);
+
+		String response = Xls.setPrintSetup(requestNode.toString());
+		
+		JsonNode responseNode = mapper.readTree(response);
+		assertEquals(Executor.OK, responseNode.get(Executor.STATUS).asText());
+		assertNull(responseNode.get(Executor.ERRORS));
+
+		requestNode = mapper.createObjectNode();
+		requestNode.put(Key.PATH.key(), file.getAbsolutePath());
+
+		response = Xls.saveWorkbook(requestNode.toString());
+		
+		responseNode = mapper.readTree(response);
+		assertEquals(Executor.OK, responseNode.get(Executor.STATUS).asText());
+		assertNull(responseNode.get(Executor.ERRORS));
+		assertTrue(file.isFile());
+	}
+	
 	@Test
 	public void testJSONFormatting() throws JsonMappingException, JsonProcessingException
 	{
