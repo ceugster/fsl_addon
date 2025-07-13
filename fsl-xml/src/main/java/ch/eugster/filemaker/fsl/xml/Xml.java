@@ -193,12 +193,12 @@ public class Xml extends Executor
 		return element;
 	}
 
-	private static Element addElement(Element parentElement, String elementName)
-	{
-		Element element = new Element(elementName);
-		parentElement.addContent(element);
-		return element;
-	}
+//	private static Element addElement(Element parentElement, String elementName)
+//	{
+//		Element element = new Element(elementName);
+//		parentElement.addContent(element);
+//		return element;
+//	}
 	
 	public static void setElement(String document, String path, String value, String type) throws Exception
 	{
@@ -235,10 +235,10 @@ public class Xml extends Executor
 		}
 	}
 
-	private static void setElement(Element parentElement, String subPath, String tag, String value)
-	{
-		
-	}
+//	private static void setElement(Element parentElement, String subPath, String tag, String value)
+//	{
+//		
+//	}
 	
 	protected static Document buildDocument(String doc) throws Exception
 	{

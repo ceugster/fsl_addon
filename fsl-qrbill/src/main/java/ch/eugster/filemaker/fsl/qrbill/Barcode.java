@@ -2,7 +2,6 @@ package ch.eugster.filemaker.fsl.qrbill;
 
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.GraphicsEnvironment;
 import java.io.ByteArrayOutputStream;
 
 import com.fasterxml.jackson.databind.JsonNode;

@@ -52,8 +52,6 @@ import org.apache.poi.xssf.usermodel.XSSFHeaderFooterProperties;
 import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -80,7 +78,7 @@ public class Xls extends Executor
 {
 	public static Workbook activeWorkbook;
 
-	private static Logger log = LoggerFactory.getLogger(Xls.class);
+//	private static Logger log = LoggerFactory.getLogger(Xls.class);
 
 	/**
 	 * Set active sheet
