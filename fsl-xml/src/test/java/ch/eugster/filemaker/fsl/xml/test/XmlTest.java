@@ -220,7 +220,7 @@ public class XmlTest extends Xml
 		}
 		catch (Exception e)
 		{
-			assertEquals("Invalid element name: \"\"", e.getLocalizedMessage());
+			assertEquals("Illegal element name: \"\"", e.getLocalizedMessage());
 		}
 	}
 
@@ -233,7 +233,7 @@ public class XmlTest extends Xml
 		}
 		catch (Exception e)
 		{
-			assertEquals("Invalid element name: \"\"", e.getLocalizedMessage());
+			assertEquals("Illegal element name: \"\"", e.getLocalizedMessage());
 		}
 	}
 
@@ -246,13 +246,13 @@ public class XmlTest extends Xml
 		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<root />\r\n", XML_OUTPUTTER.outputString(document));
 	}
 
-//	@Test
-//	public void testBuildDocumentWithoutElements() throws Exception
-//	{
-//		String content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n";
-//		Document document = Xml.buildDocument(content);
-//		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n", XML_OUTPUTTER.outputString(document));
-//	}
+	@Test
+	public void testBuildDocumentWithoutElements() throws Exception
+	{
+		String content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n";
+		Document document = Xml.buildDocument(content);
+		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n", XML_OUTPUTTER.outputString(document));
+	}
 	
 	@Test
 	public void testSetElementWithWrongRootElementName() throws Exception
@@ -265,7 +265,7 @@ public class XmlTest extends Xml
 		catch (Exception e)
 		{
 			assertTrue(Exception.class.isInstance(e));
-			assertEquals("Invalid root element name: anotherName", e.getLocalizedMessage());
+			assertEquals("Illegal root element name: anotherName", e.getLocalizedMessage());
 		}
 	}
 

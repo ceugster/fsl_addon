@@ -94,7 +94,7 @@ public class Xml extends Executor
 			}
 			catch (Exception e)
 			{
-				throw new Exception("Invalid number format: " + value);
+				throw new Exception("Illegal number format: " + value);
 			}
 		}
 		else if (type.equals("XMLBoolean"))
@@ -171,7 +171,7 @@ public class Xml extends Executor
 		}
 		else
 		{
-			throw new Exception("Invalid root element name: " + elementNames[0]);
+			throw new Exception("Illegal root element name: " + elementNames[0]);
 		}
 		return parentElement;
 	}
@@ -188,7 +188,7 @@ public class Xml extends Executor
 		}
 		catch (Exception e)
 		{
-			throw new Exception("Invalid element name: \"\"");
+			throw new Exception("Illegal element name: \"\"");
 		}
 		return element;
 	}
@@ -250,7 +250,7 @@ public class Xml extends Executor
 		}
 		catch (Exception e)
 		{
-			throw new Exception("Invalid file format");
+			throw new Exception("Illegal file format");
 		}
 		return DOM_BUILDER.build(document);
 	}
